@@ -4,6 +4,8 @@ void main() {
   runApp(MyApp());
 }
 
+enum grupoAlan { primeiroLugar, segundoLugar, terceiroLugar, quartoLugar }
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -58,6 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
       'quartoLugar': 0
     },
   };
+
+  Map seletorLugar = {'alan': 0, 'guilherme': 0, 'joao': 0, 'tomas': 0};
+
   String getSingleScore({String pessoa, String qualPlacar}) {
     int temp = todosOsPlacares[pessoa][qualPlacar];
     Map keyToString = {
@@ -80,68 +85,303 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
           child: ListView(
-        children: [
-          ListTile(
-            title: Text("Alan"),
-            trailing: Text(
-                todosOsPlacares['alan']['placarTotal'].toString() + " pontos"),
-            subtitle: Text(
-              "${getSingleScore(pessoa: 'alan',qualPlacar:'primeiroLugar')}\n"
-              "${getSingleScore(pessoa: 'alan',qualPlacar:'segundoLugar')}\n"
-              "${getSingleScore(pessoa: 'alan',qualPlacar:'terceiroLugar')}\n"
-              "${getSingleScore(pessoa: 'alan',qualPlacar:'quartoLugar')}\n"
-            ),
+            children: [
+              ListTile(
+                title: Text("Alan"),
+                trailing: Text(
+                    todosOsPlacares['alan']['placarTotal'].toString() +
+                        " pontos"),
+                subtitle: Text(
+                    "${getSingleScore(pessoa: 'alan', qualPlacar: 'primeiroLugar')}\n"
+                    "${getSingleScore(pessoa: 'alan', qualPlacar: 'segundoLugar')}\n"
+                    "${getSingleScore(pessoa: 'alan', qualPlacar: 'terceiroLugar')}\n"
+                    "${getSingleScore(pessoa: 'alan', qualPlacar: 'quartoLugar')}\n"),
+              ),
+              Divider(
+                color: Colors.orange,
+                thickness: 2,
+              ),
+              ListTile(
+                title: Text("Guilherme"),
+                trailing: Text(
+                    todosOsPlacares['guilherme']['placarTotal'].toString() +
+                        " pontos"),
+                subtitle: Text(
+                    "${getSingleScore(pessoa: 'guilherme', qualPlacar: 'primeiroLugar')}\n"
+                    "${getSingleScore(pessoa: 'guilherme', qualPlacar: 'segundoLugar')}\n"
+                    "${getSingleScore(pessoa: 'guilherme', qualPlacar: 'terceiroLugar')}\n"
+                    "${getSingleScore(pessoa: 'guilherme', qualPlacar: 'quartoLugar')}\n"),
+              ),
+              Divider(
+                color: Colors.orange,
+                thickness: 2,
+              ),
+              ListTile(
+                title: Text("João"),
+                trailing: Text(
+                    todosOsPlacares['joao']['placarTotal'].toString() +
+                        " pontos"),
+                subtitle: Text(
+                    "${getSingleScore(pessoa: 'joao', qualPlacar: 'primeiroLugar')}\n"
+                    "${getSingleScore(pessoa: 'joao', qualPlacar: 'segundoLugar')}\n"
+                    "${getSingleScore(pessoa: 'joao', qualPlacar: 'terceiroLugar')}\n"
+                    "${getSingleScore(pessoa: 'joao', qualPlacar: 'quartoLugar')}\n"),
+              ),
+              Divider(
+                color: Colors.orange,
+                thickness: 2,
+              ),
+              ListTile(
+                title: Text("Tomás"),
+                trailing: Text(
+                    todosOsPlacares['tomas']['placarTotal'].toString() +
+                        " pontos"),
+                subtitle: Text(
+                    "${getSingleScore(pessoa: 'tomas', qualPlacar: 'primeiroLugar')}\n"
+                    "${getSingleScore(pessoa: 'tomas', qualPlacar: 'segundoLugar')}\n"
+                    "${getSingleScore(pessoa: 'tomas', qualPlacar: 'terceiroLugar')}\n"
+                    "${getSingleScore(pessoa: 'tomas', qualPlacar: 'quartoLugar')}\n"),
+              ),
+            ],
           ),
-          ListTile(
-            title: Text("Guilherme"),
-            trailing: Text(
-                todosOsPlacares['guilherme']['placarTotal'].toString() +
-                    " pontos"),
-            subtitle: Text(
-              "${getSingleScore(pessoa: 'guilherme',qualPlacar:'primeiroLugar')}\n"
-              "${getSingleScore(pessoa: 'guilherme',qualPlacar:'segundoLugar')}\n"
-              "${getSingleScore(pessoa: 'guilherme',qualPlacar:'terceiroLugar')}\n"
-              "${getSingleScore(pessoa: 'guilherme',qualPlacar:'quartoLugar')}\n"
-            ),
-          ),
-          ListTile(
-            title: Text("João"),
-            trailing: Text(
-                todosOsPlacares['joao']['placarTotal'].toString() + " pontos"),
-            subtitle: Text(
-              "${getSingleScore(pessoa: 'joao',qualPlacar:'primeiroLugar')}\n"
-              "${getSingleScore(pessoa: 'joao',qualPlacar:'segundoLugar')}\n"
-              "${getSingleScore(pessoa: 'joao',qualPlacar:'terceiroLugar')}\n"
-              "${getSingleScore(pessoa: 'joao',qualPlacar:'quartoLugar')}\n"
-            ),
-          ),
-          ListTile(
-            title: Text("Tomás"),
-            trailing: Text(
-                todosOsPlacares['tomas']['placarTotal'].toString() + " pontos"),
-            subtitle: Text(
-              "${getSingleScore(pessoa: 'tomas',qualPlacar:'primeiroLugar')}\n"
-              "${getSingleScore(pessoa: 'tomas',qualPlacar:'segundoLugar')}\n"
-              "${getSingleScore(pessoa: 'tomas',qualPlacar:'terceiroLugar')}\n"
-              "${getSingleScore(pessoa: 'tomas',qualPlacar:'quartoLugar')}\n"
-              
-            ),
-          ),
-        ],
-      )),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return Dialog(
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Alan'),
+                              Radio(
+                                groupValue: seletorLugar['alan'],
+                                value: grupoAlan.primeiroLugar,
+                                onChanged: (value) {
+                                  seletorLugar['alan'] = value;
+                                  print(value);
+                                  setState(() {});
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['alan'],
+                                value: grupoAlan.segundoLugar,
+                                onChanged: (value) {
+                                  seletorLugar['alan'] = value;
+                                  print(value);
+                                  setState(() {});
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['alan'],
+                                value: grupoAlan.terceiroLugar,
+                                visualDensity: VisualDensity(
+                                    horizontal: VisualDensity.maximumDensity),
+                                onChanged: (value) {
+                                  print(value);
+                                  seletorLugar['alan'] = value;
+                                  setState(() {});
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['alan'],
+                                value: grupoAlan.quartoLugar,
+                                onChanged: (value) {
+                                  print(value);
+                                  seletorLugar['alan'] = value;
+                                  setState(() {});
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Guilherme'),
+                              Radio(
+                                groupValue: seletorLugar['guilherme'],
+                                value: 1,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                    seletorLugar['guilherme'] = value;
+                                  });
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['guilherme'],
+                                value: 2,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                    seletorLugar['guilherme'] = value;
+                                  });
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['guilherme'],
+                                value: 3,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                    seletorLugar['guilherme'] = value;
+                                  });
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['guilherme'],
+                                value: 4,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                    seletorLugar['guilherme'] = value;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Joao'),
+                              Radio(
+                                groupValue: seletorLugar['joao'],
+                                value: 1,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                    seletorLugar['joao'] = value;
+                                  });
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['joao'],
+                                value: 2,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                    seletorLugar['joao'] = value;
+                                  });
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['joao'],
+                                value: 3,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                    seletorLugar['joao'] = value;
+                                  });
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['joao'],
+                                value: 4,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                    seletorLugar['joao'] = value;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text('tomas'),
+                              Radio(
+                                groupValue: seletorLugar['tomas'],
+                                value: 1,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                    seletorLugar['tomas'] = value;
+                                  });
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['tomas'],
+                                value: 2,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                    seletorLugar['tomas'] = value;
+                                  });
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['tomas'],
+                                value: 3,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                    seletorLugar['tomas'] = value;
+                                  });
+                                },
+                              ),
+                              Radio(
+                                groupValue: seletorLugar['tomas'],
+                                value: 4,
+                                onChanged: (value) {
+                                  setState(() {
+                                    seletorLugar['tomas'] = value;
+                                    print(seletorLugar);
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          Row(
+                            children: [
+                              FlatButton(
+                                child: Text("submit"),
+                                onPressed: () {
+                                  // TODO
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              FlatButton(
+                                child: Text("submit"),
+                                onPressed: () {
+                                  // TODO
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }

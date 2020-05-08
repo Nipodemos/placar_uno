@@ -1,5 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-void main() {
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:placar_uno/AdicionarVitoria.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Directory document = await getApplicationDocumentsDirectory();
+  Hive.init(document.path);
+  await Hive.openBox<Map>("placarUno");
   runApp(MyApp());
 }
 
@@ -23,6 +33,7 @@ class ListaDeJogadores extends StatefulWidget {
 }
 
 class _ListaDeJogadoresState extends State<ListaDeJogadores> {
+  Box placarUnoBox;
   Map<String, dynamic> todosOsPlacares = {
     'alan': {
       'placarTotal': 0,
@@ -55,6 +66,23 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
   };
 
   @override
+  void initState() {
+    super.initState();
+    placarUnoBox = Hive.box("placarUno");
+    if (placarUnoBox.get('alan') == null) {
+      placarUnoBox.put('alan', {
+        'placarTotal': 0,
+        'primeiroLugar': 0,
+        'segundoLugar': 0,
+        'terceiroLugar': 0,
+        'quartoLugar': 0
+      });
+    }
+  }
+
+  bool adicionarVitoria = false;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -62,20 +90,26 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: todosOsPlacares.keys.toList().length,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                  color: Colors.orange,
+                  thickness: 2,
+                ),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: placarUnoBox.keys.toList().length,
                 itemBuilder: (BuildContext context, int index) {
-                  List keysInList = todosOsPlacares.keys.toList();
+                  List keysInList = placarUnoBox.keys.toList();
                   print(index);
                   print(keysInList[index]);
                   return ListTile(
                     title: Text(keysInList[index]),
-                    trailing: Text(todosOsPlacares[keysInList[index]]
-                                ['placarTotal']
-                            .toString() +
+                    trailing: Text(placarUnoBox.get(
+                            [keysInList[index]])['placarTotal'].toString() +
                         " pontos"),
                     subtitle: Text(
                       getSingleScore(
@@ -94,285 +128,24 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
                   );
                 },
               ),
-            ),
-            RaisedButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (ctx) {
-                    Map seletorLugar = {
-                      'alan': 0,
-                      'guilherme': 0,
-                      'joao': 0,
-                      'tomas': 0
-                    };
-                    return StatefulBuilder(
-                      builder: (ct, setState) {
-                        String message = "";
-                        return Dialog(
-                          child: Container(
-                            padding: EdgeInsets.all(8),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Alan'),
-                                    Radio(
-                                      groupValue: seletorLugar['alan'],
-                                      value: 1,
-                                      onChanged: (value) {
-                                        seletorLugar['alan'] = value;
-                                        print(value);
-                                        setState(() {});
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['alan'],
-                                      value: 2,
-                                      onChanged: (value) {
-                                        seletorLugar['alan'] = value;
-                                        print(value);
-                                        setState(() {});
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['alan'],
-                                      value: 3,
-                                      visualDensity: VisualDensity(
-                                          horizontal:
-                                              VisualDensity.maximumDensity),
-                                      onChanged: (value) {
-                                        print(value);
-                                        seletorLugar['alan'] = value;
-                                        setState(() {});
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['alan'],
-                                      value: 4,
-                                      onChanged: (value) {
-                                        print(value);
-                                        seletorLugar['alan'] = value;
-                                        setState(() {});
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 16),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Guilherme'),
-                                    Radio(
-                                      groupValue: seletorLugar['guilherme'],
-                                      value: 1,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          print(value);
-                                          seletorLugar['guilherme'] = value;
-                                        });
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['guilherme'],
-                                      value: 2,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          print(value);
-                                          seletorLugar['guilherme'] = value;
-                                        });
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['guilherme'],
-                                      value: 3,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          print(value);
-                                          seletorLugar['guilherme'] = value;
-                                        });
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['guilherme'],
-                                      value: 4,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          print(value);
-                                          seletorLugar['guilherme'] = value;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 16),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Joao'),
-                                    Radio(
-                                      groupValue: seletorLugar['joao'],
-                                      value: 1,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          print(value);
-                                          seletorLugar['joao'] = value;
-                                        });
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['joao'],
-                                      value: 2,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          print(value);
-                                          seletorLugar['joao'] = value;
-                                        });
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['joao'],
-                                      value: 3,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          print(value);
-                                          seletorLugar['joao'] = value;
-                                        });
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['joao'],
-                                      value: 4,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          print(value);
-                                          seletorLugar['joao'] = value;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 16),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text('tomas'),
-                                    Radio(
-                                      groupValue: seletorLugar['tomas'],
-                                      value: 1,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          print(value);
-                                          seletorLugar['tomas'] = value;
-                                        });
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['tomas'],
-                                      value: 2,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          print(value);
-                                          seletorLugar['tomas'] = value;
-                                        });
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['tomas'],
-                                      value: 3,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          print(value);
-                                          seletorLugar['tomas'] = value;
-                                        });
-                                      },
-                                    ),
-                                    Radio(
-                                      groupValue: seletorLugar['tomas'],
-                                      value: 4,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          seletorLugar['tomas'] = value;
-                                          print(seletorLugar);
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 16),
-                                Text(message),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    FlatButton(
-                                      child: Text("Cancelar"),
-                                      onPressed: () {
-                                        // TODO
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                    Divider(),
-                                    RaisedButton(
-                                      child: Text("Confirmar"),
-                                      onPressed: () {
-                                        const Map numberToKey = {
-                                          1: 'primeiroLugar',
-                                          2: 'segundoLugar',
-                                          3: 'terceiroLugar',
-                                          4: 'quartoLugar'
-                                        };
-                                        if (seletorLugar['alan'] >= 1 &&
-                                            seletorLugar['guilherme'] >= 1 &&
-                                            seletorLugar['joao'] >= 1 &&
-                                            seletorLugar['tomas'] >= 1) {
-                                          todosOsPlacares['alan'][numberToKey[
-                                              seletorLugar['alan']]]++;
-                                          todosOsPlacares['guilherme'][
-                                              numberToKey[
-                                                  seletorLugar['guilherme']]]++;
-                                          todosOsPlacares['joao'][numberToKey[
-                                              seletorLugar['joao']]]++;
-                                          todosOsPlacares['tomas'][numberToKey[
-                                              seletorLugar['tomas']]]++;
-                                          print(
-                                              'ao que tudo indica, deu certo');
-                                          print(todosOsPlacares);
-                                          message =
-                                              "Feito! parabens aos vencedores!";
-                                              setState(() {});
-                                          Navigator.pop(context);
-                                        } else {
-                                          print('algum valor ta vazio');
-                                          message = "algum valor ta vazio";
-                                          setState(() {});
-                                        }
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            )
-          ],
+              RaisedButton(
+                onPressed: () {
+                  adicionarVitoria = !adicionarVitoria;
+                  setState(() {});
+                },
+              ),
+              adicionarVitoria
+                  ? AdicionarVitoria()
+                  : Text('clique para adicionar vitoria')
+            ],
+          ),
         ),
       ),
     );
   }
 
   String getSingleScore({String pessoa, String qualPlacar}) {
-    int temp = todosOsPlacares[pessoa][qualPlacar];
+    int temp = placarUnoBox.get(pessoa)[qualPlacar];
     Map keyToString = {
       'primeiroLugar': '1º',
       'segundoLugar': '2º',
@@ -394,4 +167,3 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
     }
   }
 }
-

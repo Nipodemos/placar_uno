@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:placar_uno/AdicionarVitoria.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Directory document = await getApplicationDocumentsDirectory();
-  Hive.init(document.path);
+  await Hive.initFlutter();
   await Hive.openBox<Map>("placarUno");
   runApp(MyApp());
 }
@@ -33,44 +34,41 @@ class ListaDeJogadores extends StatefulWidget {
 }
 
 class _ListaDeJogadoresState extends State<ListaDeJogadores> {
-  Box placarUnoBox;
-  Map<String, dynamic> todosOsPlacares = {
-    'alan': {
-      'placarTotal': 0,
-      'primeiroLugar': 0,
-      'segundoLugar': 0,
-      'terceiroLugar': 0,
-      'quartoLugar': 0
-    },
-    'tomas': {
-      'placarTotal': 0,
-      'primeiroLugar': 0,
-      'segundoLugar': 0,
-      'terceiroLugar': 0,
-      'quartoLugar': 0
-    },
-    'joao': {
-      'placarTotal': 0,
-      'primeiroLugar': 0,
-      'segundoLugar': 0,
-      'terceiroLugar': 0,
-      'quartoLugar': 0
-    },
-    'guilherme': {
-      'placarTotal': 1,
-      'primeiroLugar': 0,
-      'segundoLugar': 3,
-      'terceiroLugar': 0,
-      'quartoLugar': 0
-    },
-  };
+  Box<Map> placarUnoBox;
 
   @override
   void initState() {
     super.initState();
-    placarUnoBox = Hive.box("placarUno");
+    placarUnoBox = Hive.box<Map>("placarUno");
     if (placarUnoBox.get('alan') == null) {
       placarUnoBox.put('alan', {
+        'placarTotal': 0,
+        'primeiroLugar': 0,
+        'segundoLugar': 0,
+        'terceiroLugar': 0,
+        'quartoLugar': 0
+      });
+    }
+    if (placarUnoBox.get('guilherme') == null) {
+      placarUnoBox.put('guilherme', {
+        'placarTotal': 0,
+        'primeiroLugar': 0,
+        'segundoLugar': 0,
+        'terceiroLugar': 0,
+        'quartoLugar': 0
+      });
+    }
+    if (placarUnoBox.get('joao') == null) {
+      placarUnoBox.put('joao', {
+        'placarTotal': 0,
+        'primeiroLugar': 0,
+        'segundoLugar': 0,
+        'terceiroLugar': 0,
+        'quartoLugar': 0
+      });
+    }
+    if (placarUnoBox.get('tomas') == null) {
+      placarUnoBox.put('tomas', {
         'placarTotal': 0,
         'primeiroLugar': 0,
         'segundoLugar': 0,
@@ -86,7 +84,7 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("placar do Uno"),
+        title: Text("Placar do Uno"),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -94,37 +92,44 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListView.separated(
-                separatorBuilder: (context, index) => Divider(
-                  color: Colors.orange,
-                  thickness: 2,
-                ),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: placarUnoBox.keys.toList().length,
-                itemBuilder: (BuildContext context, int index) {
-                  List keysInList = placarUnoBox.keys.toList();
-                  print(index);
-                  print(keysInList[index]);
-                  return ListTile(
-                    title: Text(keysInList[index]),
-                    trailing: Text(placarUnoBox.get(
-                            [keysInList[index]])['placarTotal'].toString() +
-                        " pontos"),
-                    subtitle: Text(
-                      getSingleScore(
-                              pessoa: keysInList[index],
-                              qualPlacar: 'primeiroLugar') +
-                          getSingleScore(
-                              pessoa: keysInList[index],
-                              qualPlacar: 'segundoLugar') +
-                          getSingleScore(
-                              pessoa: keysInList[index],
-                              qualPlacar: 'terceiroLugar') +
-                          getSingleScore(
-                              pessoa: keysInList[index],
-                              qualPlacar: 'quartoLugar'),
+              ValueListenableBuilder(
+                valueListenable: placarUnoBox.listenable(),
+                builder: (context, value, child) {
+                  return ListView.separated(
+                    separatorBuilder: (context, index) => Divider(
+                      color: Colors.orange,
+                      thickness: 2,
                     ),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: placarUnoBox.keys.toList().length,
+                    itemBuilder: (BuildContext context, int index) {
+                      List keysInList = placarUnoBox.keys.toList();
+                      //print(index);
+                      //print(keysInList);
+                      //print(keysInList[index]);
+                      var key = keysInList[index];
+                      return ListTile(
+                        title: Text(keysInList[index]),
+                        trailing: Text(
+                            placarUnoBox.get(key)['placarTotal'].toString() +
+                                " pontos"),
+                        subtitle: Text(
+                          getSingleScore(
+                                  pessoa: keysInList[index],
+                                  qualPlacar: 'primeiroLugar') +
+                              getSingleScore(
+                                  pessoa: keysInList[index],
+                                  qualPlacar: 'segundoLugar') +
+                              getSingleScore(
+                                  pessoa: keysInList[index],
+                                  qualPlacar: 'terceiroLugar') +
+                              getSingleScore(
+                                  pessoa: keysInList[index],
+                                  qualPlacar: 'quartoLugar'),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
@@ -136,7 +141,51 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
               ),
               adicionarVitoria
                   ? AdicionarVitoria()
-                  : Text('clique para adicionar vitoria')
+                  : Text('clique para adicionar vitoria'),
+              Padding(
+                padding: const EdgeInsets.only(top: 60),
+                child: RaisedButton(
+                  onPressed: () {
+                    if (placarUnoBox.get('alan') != null) {
+                      placarUnoBox.put('alan', {
+                        'placarTotal': 0,
+                        'primeiroLugar': 0,
+                        'segundoLugar': 0,
+                        'terceiroLugar': 0,
+                        'quartoLugar': 0
+                      });
+                    }
+                    if (placarUnoBox.get('guilherme') != null) {
+                      placarUnoBox.put('guilherme', {
+                        'placarTotal': 0,
+                        'primeiroLugar': 0,
+                        'segundoLugar': 0,
+                        'terceiroLugar': 0,
+                        'quartoLugar': 0
+                      });
+                    }
+                    if (placarUnoBox.get('joao') != null) {
+                      placarUnoBox.put('joao', {
+                        'placarTotal': 0,
+                        'primeiroLugar': 0,
+                        'segundoLugar': 0,
+                        'terceiroLugar': 0,
+                        'quartoLugar': 0
+                      });
+                    }
+                    if (placarUnoBox.get('tomas') != null) {
+                      placarUnoBox.put('tomas', {
+                        'placarTotal': 0,
+                        'primeiroLugar': 0,
+                        'segundoLugar': 0,
+                        'terceiroLugar': 0,
+                        'quartoLugar': 0
+                      });
+                    }
+                  },
+                  child: Text('Deletar TUDO'),
+                ),
+              )
             ],
           ),
         ),

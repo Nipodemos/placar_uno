@@ -1,14 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:placar_uno/AdicionarVitoria.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Directory document = await getApplicationDocumentsDirectory();
   await Hive.initFlutter();
   await Hive.openBox<Map>("placarUno");
   runApp(MyApp());
@@ -78,7 +74,7 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
     }
   }
 
-  bool adicionarVitoria = false;
+  bool mostrarTelaAddPlacar = false;
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +88,24 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              RaisedButton(
+                child: Text(mostrarTelaAddPlacar
+                    ? "Fechar tela placar"
+                    : "Abrir tela placar"),
+                onPressed: () {
+                  mostrarTelaAddPlacar = !mostrarTelaAddPlacar;
+                  setState(() {});
+                },
+              ),
+              AnimatedContainer(
+                duration: Duration(milliseconds: 600),
+                height: mostrarTelaAddPlacar ? 320: 0,
+                child: mostrarTelaAddPlacar ? AdicionarVitoria() : Text(''),
+              ),
+              Divider(
+                color: Colors.orange,
+                thickness: 2,
+              ),
               ValueListenableBuilder(
                 valueListenable: placarUnoBox.listenable(),
                 builder: (context, value, child) {
@@ -102,18 +116,18 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
                     ),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: placarUnoBox.keys.toList().length,
+                    itemCount: 4,
                     itemBuilder: (BuildContext context, int index) {
                       List keysInList = placarUnoBox.keys.toList();
                       //print(index);
                       //print(keysInList);
                       //print(keysInList[index]);
                       var key = keysInList[index];
+                      int placarTotal = placarUnoBox.get(key)['placarTotal'];
                       return ListTile(
                         title: Text(keysInList[index]),
-                        trailing: Text(
-                            placarUnoBox.get(key)['placarTotal'].toString() +
-                                " pontos"),
+                        trailing: Text(placarTotal.toString() +
+                            (placarTotal > 1 ? " pontos" : ' ponto')),
                         subtitle: Text(
                           getSingleScore(
                                   pessoa: keysInList[index],
@@ -133,58 +147,51 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
                   );
                 },
               ),
+              Divider(
+                color: Colors.orange,
+                thickness: 2,
+              ),
+              SizedBox(height: 60),
               RaisedButton(
                 onPressed: () {
-                  adicionarVitoria = !adicionarVitoria;
-                  setState(() {});
+                  if (placarUnoBox.get('alan') != null) {
+                    placarUnoBox.put('alan', {
+                      'placarTotal': 0,
+                      'primeiroLugar': 0,
+                      'segundoLugar': 0,
+                      'terceiroLugar': 0,
+                      'quartoLugar': 0
+                    });
+                  }
+                  if (placarUnoBox.get('guilherme') != null) {
+                    placarUnoBox.put('guilherme', {
+                      'placarTotal': 0,
+                      'primeiroLugar': 0,
+                      'segundoLugar': 0,
+                      'terceiroLugar': 0,
+                      'quartoLugar': 0
+                    });
+                  }
+                  if (placarUnoBox.get('joao') != null) {
+                    placarUnoBox.put('joao', {
+                      'placarTotal': 0,
+                      'primeiroLugar': 0,
+                      'segundoLugar': 0,
+                      'terceiroLugar': 0,
+                      'quartoLugar': 0
+                    });
+                  }
+                  if (placarUnoBox.get('tomas') != null) {
+                    placarUnoBox.put('tomas', {
+                      'placarTotal': 0,
+                      'primeiroLugar': 0,
+                      'segundoLugar': 0,
+                      'terceiroLugar': 0,
+                      'quartoLugar': 0
+                    });
+                  }
                 },
-              ),
-              adicionarVitoria
-                  ? AdicionarVitoria()
-                  : Text('clique para adicionar vitoria'),
-              Padding(
-                padding: const EdgeInsets.only(top: 60),
-                child: RaisedButton(
-                  onPressed: () {
-                    if (placarUnoBox.get('alan') != null) {
-                      placarUnoBox.put('alan', {
-                        'placarTotal': 0,
-                        'primeiroLugar': 0,
-                        'segundoLugar': 0,
-                        'terceiroLugar': 0,
-                        'quartoLugar': 0
-                      });
-                    }
-                    if (placarUnoBox.get('guilherme') != null) {
-                      placarUnoBox.put('guilherme', {
-                        'placarTotal': 0,
-                        'primeiroLugar': 0,
-                        'segundoLugar': 0,
-                        'terceiroLugar': 0,
-                        'quartoLugar': 0
-                      });
-                    }
-                    if (placarUnoBox.get('joao') != null) {
-                      placarUnoBox.put('joao', {
-                        'placarTotal': 0,
-                        'primeiroLugar': 0,
-                        'segundoLugar': 0,
-                        'terceiroLugar': 0,
-                        'quartoLugar': 0
-                      });
-                    }
-                    if (placarUnoBox.get('tomas') != null) {
-                      placarUnoBox.put('tomas', {
-                        'placarTotal': 0,
-                        'primeiroLugar': 0,
-                        'segundoLugar': 0,
-                        'terceiroLugar': 0,
-                        'quartoLugar': 0
-                      });
-                    }
-                  },
-                  child: Text('Deletar TUDO'),
-                ),
+                child: Text('Deletar TUDO'),
               )
             ],
           ),
@@ -194,7 +201,8 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
   }
 
   String getSingleScore({String pessoa, String qualPlacar}) {
-    int temp = placarUnoBox.get(pessoa)[qualPlacar];
+    //print('func getSingleScore, pessoa: $pessoa, qualPlacar: $qualPlacar');
+    int contagemVitorias = placarUnoBox.get(pessoa)[qualPlacar];
     Map keyToString = {
       'primeiroLugar': '1º',
       'segundoLugar': '2º',
@@ -206,10 +214,10 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
     } else if (qualPlacar.isEmpty || qualPlacar == null) {
       return "vc esqueceu o argumento 'qualPlacar'";
     } else {
-      if (temp == 0 || temp == 1) {
-        return "$temp vitória   no ${keyToString[qualPlacar]} lugar\n";
-      } else if (temp > 1) {
-        return "$temp vitórias no ${keyToString[qualPlacar]} lugar\n";
+      if (contagemVitorias == 0 || contagemVitorias == 1) {
+        return "$contagemVitorias vitória   no ${keyToString[qualPlacar]} lugar\n";
+      } else if (contagemVitorias > 1) {
+        return "$contagemVitorias vitórias no ${keyToString[qualPlacar]} lugar\n";
       } else {
         return "Erro não esperado";
       }

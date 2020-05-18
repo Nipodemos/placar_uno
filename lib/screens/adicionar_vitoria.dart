@@ -118,9 +118,10 @@ class _AdicionarVitoriaState extends State<AdicionarVitoria> {
 }
 
 class RadioPositionInScore extends StatefulWidget {
-  final String name;
-  final String chave;
   RadioPositionInScore({this.name, this.chave});
+
+  final String chave;
+  final String name;
 
   @override
   _RadioPositionInScoreState createState() => _RadioPositionInScoreState();
@@ -128,6 +129,7 @@ class RadioPositionInScore extends StatefulWidget {
 
 class _RadioPositionInScoreState extends State<RadioPositionInScore> {
   Box<Map> placarUnoBox;
+
   @override
   void initState() {
     super.initState();
@@ -138,6 +140,20 @@ class _RadioPositionInScoreState extends State<RadioPositionInScore> {
         {'alan': 0, 'guilherme': 0, 'joao': 0, 'tomas': 0},
       );
     }
+  }
+
+  Widget radioButtonDaPosicao(int valor) {
+    Map seletorLugar = placarUnoBox.get('valoresContainerDefinirPlacar');
+    return Radio<int>(
+      groupValue: seletorLugar[widget.chave],
+      value: valor,
+      onChanged: (value) {
+        setState(() {
+          print(value);
+          seletorLugar[widget.chave] = value;
+        });
+      },
+    );
   }
 
   @override
@@ -156,20 +172,6 @@ class _RadioPositionInScoreState extends State<RadioPositionInScore> {
           radioButtonDaPosicao(4)
         ],
       ),
-    );
-  }
-
-  Widget radioButtonDaPosicao(int valor) {
-    Map seletorLugar = placarUnoBox.get('valoresContainerDefinirPlacar');
-    return Radio<int>(
-      groupValue: seletorLugar[widget.chave],
-      value: valor,
-      onChanged: (value) {
-        setState(() {
-          print(value);
-          seletorLugar[widget.chave] = value;
-        });
-      },
     );
   }
 }

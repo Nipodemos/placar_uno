@@ -10,6 +10,7 @@ class ListaDeJogadores extends StatefulWidget {
 }
 
 class _ListaDeJogadoresState extends State<ListaDeJogadores> {
+  bool mostrarTelaAddPlacar = false;
   Box<Map> placarUnoBox;
 
   @override
@@ -54,7 +55,29 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
     }
   }
 
-  bool mostrarTelaAddPlacar = false;
+  String getSingleScore({String pessoa, String qualPlacar}) {
+    //print('func getSingleScore, pessoa: $pessoa, qualPlacar: $qualPlacar');
+    int contagemVitorias = placarUnoBox.get(pessoa)[qualPlacar];
+    Map keyToString = {
+      'primeiroLugar': '1º',
+      'segundoLugar': '2º',
+      'terceiroLugar': '3º',
+      'quartoLugar': '4º',
+    };
+    if (pessoa.isEmpty || pessoa == null) {
+      return "vc esqueceu o argumento 'pessoa'";
+    } else if (qualPlacar.isEmpty || qualPlacar == null) {
+      return "vc esqueceu o argumento 'qualPlacar'";
+    } else {
+      if (contagemVitorias == 0 || contagemVitorias == 1) {
+        return "$contagemVitorias vitória   no ${keyToString[qualPlacar]} lugar\n";
+      } else if (contagemVitorias > 1) {
+        return "$contagemVitorias vitórias no ${keyToString[qualPlacar]} lugar\n";
+      } else {
+        return "Erro não esperado";
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,29 +201,5 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
         ),
       ),
     );
-  }
-
-  String getSingleScore({String pessoa, String qualPlacar}) {
-    //print('func getSingleScore, pessoa: $pessoa, qualPlacar: $qualPlacar');
-    int contagemVitorias = placarUnoBox.get(pessoa)[qualPlacar];
-    Map keyToString = {
-      'primeiroLugar': '1º',
-      'segundoLugar': '2º',
-      'terceiroLugar': '3º',
-      'quartoLugar': '4º',
-    };
-    if (pessoa.isEmpty || pessoa == null) {
-      return "vc esqueceu o argumento 'pessoa'";
-    } else if (qualPlacar.isEmpty || qualPlacar == null) {
-      return "vc esqueceu o argumento 'qualPlacar'";
-    } else {
-      if (contagemVitorias == 0 || contagemVitorias == 1) {
-        return "$contagemVitorias vitória   no ${keyToString[qualPlacar]} lugar\n";
-      } else if (contagemVitorias > 1) {
-        return "$contagemVitorias vitórias no ${keyToString[qualPlacar]} lugar\n";
-      } else {
-        return "Erro não esperado";
-      }
-    }
   }
 }

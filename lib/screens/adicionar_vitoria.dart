@@ -15,7 +15,6 @@ class _AdicionarVitoriaState extends State<AdicionarVitoria> {
     placarUnoBox = Hive.box<Map>("placarUno");
   }
 
-  //Map seletorLugar = {'alan': 0, 'guilherme': 0, 'joao': 0, 'tomas': 0};
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -97,11 +96,13 @@ class _AdicionarVitoriaState extends State<AdicionarVitoria> {
                     );
 
                     print('ao que tudo indica, deu certo');
-                    final snackBar = SnackBar(content: Text('Adicionado com sucesso!'));
+                    final snackBar =
+                        SnackBar(content: Text('Adicionado com sucesso!'));
                     Scaffold.of(context).showSnackBar(snackBar);
                     setState(() {});
                   } else {
-                    final snackBar = SnackBar(content: Text('Ocorreu um erro...'));
+                    final snackBar =
+                        SnackBar(content: Text('Ocorreu um erro...'));
                     Scaffold.of(context).showSnackBar(snackBar);
                     print('algum valor ta vazio');
                     setState(() {});

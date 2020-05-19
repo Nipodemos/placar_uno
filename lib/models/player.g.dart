@@ -1,28 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'jogador.dart';
+part of 'player.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class JogadorAdapter extends TypeAdapter<Jogador> {
+class PlayerAdapter extends TypeAdapter<Player> {
   @override
-  final typeId = 0;
+  final typeId = 1;
 
   @override
-  Jogador read(BinaryReader reader) {
+  Player read(BinaryReader reader) {
     var numOfFields = reader.readByte();
     var fields = <int, dynamic>{
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Jogador(
+    return Player(
       nome: fields[0] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Jogador obj) {
+  void write(BinaryWriter writer, Player obj) {
     writer
       ..writeByte(1)
       ..writeByte(0)

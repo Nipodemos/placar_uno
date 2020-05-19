@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:placar_uno/models/jogador.dart';
+import 'package:placar_uno/models/player.dart';
 
 import 'screens/home.dart';
+import 'screens/listar_players.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  Hive.registerAdapter(JogadorAdapter());
+  Hive.registerAdapter(PlayerAdapter());
   await Hive.openBox<Map>("placarUno");
-  await Hive.openBox<Jogador>("jogadores");
+  await Hive.openBox<Player>("players");
   runApp(MyApp());
 }
 

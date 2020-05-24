@@ -11,12 +11,12 @@ class ListaDeJogadores extends StatefulWidget {
 
 class _ListaDeJogadoresState extends State<ListaDeJogadores> {
   bool mostrarTelaAddPlacar = false;
-  Box<Map> placarUnoBox;
+  Box placarUnoBox;
 
   @override
   void initState() {
     super.initState();
-    placarUnoBox = Hive.box<Map>("placarUno");
+    placarUnoBox = Hive.box("placarUno");
     if (placarUnoBox.get('alan') == null) {
       placarUnoBox.put('alan', {
         'placarTotal': 0,

@@ -32,6 +32,7 @@ dependencies:
   hive_flutter: ^0.3.0+2
   path_provider: ^1.6.7
   supercharged: ^1.5.1
+  intro_slider: ^2.3.1
 
 dev_dependencies:
   hive_generator: ^0.7.0+2

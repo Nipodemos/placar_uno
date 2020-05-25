@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class RaisedButtonDeletarTudo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Box placarUnoBox = Hive.box('placarUno');
     return RaisedButton(
       child: Text('Deletar TUDO'),
       onPressed: () {

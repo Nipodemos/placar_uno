@@ -2,82 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:placar_uno/models/jogatina.dart';
 import 'adicionar_vitoria.dart';
 
-class ListaDeJogadores extends StatefulWidget {
+class JogatinaEmAndamento extends StatefulWidget {
   @override
-  _ListaDeJogadoresState createState() => _ListaDeJogadoresState();
+  _JogatinaEmAndamentoState createState() => _JogatinaEmAndamentoState();
 }
 
-class _ListaDeJogadoresState extends State<ListaDeJogadores> {
+class _JogatinaEmAndamentoState extends State<JogatinaEmAndamento> {
   bool mostrarTelaAddPlacar = false;
-  Box placarUnoBox;
+  Box boxJogatinaAtual;
+  Box boxJogatinas;
+  Jogatina jogatina;
 
   @override
   void initState() {
     super.initState();
-    placarUnoBox = Hive.box("placarUno");
-    if (placarUnoBox.get('alan') == null) {
-      placarUnoBox.put('alan', {
-        'placarTotal': 0,
-        'primeiroLugar': 0,
-        'segundoLugar': 0,
-        'terceiroLugar': 0,
-        'quartoLugar': 0
-      });
-    }
-    if (placarUnoBox.get('guilherme') == null) {
-      placarUnoBox.put('guilherme', {
-        'placarTotal': 0,
-        'primeiroLugar': 0,
-        'segundoLugar': 0,
-        'terceiroLugar': 0,
-        'quartoLugar': 0
-      });
-    }
-    if (placarUnoBox.get('joao') == null) {
-      placarUnoBox.put('joao', {
-        'placarTotal': 0,
-        'primeiroLugar': 0,
-        'segundoLugar': 0,
-        'terceiroLugar': 0,
-        'quartoLugar': 0
-      });
-    }
-    if (placarUnoBox.get('tomas') == null) {
-      placarUnoBox.put('tomas', {
-        'placarTotal': 0,
-        'primeiroLugar': 0,
-        'segundoLugar': 0,
-        'terceiroLugar': 0,
-        'quartoLugar': 0
-      });
-    }
+    boxJogatinaAtual = Hive.box('jogatinaAtual');
+    boxJogatinas = Hive.box('jogatinas');
+    jogatina = boxJogatinas.getAt(boxJogatinaAtual.get('index'));
   }
 
-  String getSingleScore({String pessoa, String qualPlacar}) {
-    //print('func getSingleScore, pessoa: $pessoa, qualPlacar: $qualPlacar');
-    int contagemVitorias = placarUnoBox.get(pessoa)[qualPlacar];
-    Map keyToString = {
-      'primeiroLugar': '1º',
-      'segundoLugar': '2º',
-      'terceiroLugar': '3º',
-      'quartoLugar': '4º',
-    };
-    if (pessoa.isEmpty || pessoa == null) {
-      return "vc esqueceu o argumento 'pessoa'";
-    } else if (qualPlacar.isEmpty || qualPlacar == null) {
-      return "vc esqueceu o argumento 'qualPlacar'";
-    } else {
-      if (contagemVitorias == 0 || contagemVitorias == 1) {
-        return "$contagemVitorias vitória   no ${keyToString[qualPlacar]} lugar\n";
-      } else if (contagemVitorias > 1) {
-        return "$contagemVitorias vitórias no ${keyToString[qualPlacar]} lugar\n";
-      } else {
-        return "Erro não esperado";
-      }
-    }
-  }
+  // String getSingleScore({String pessoa, String qualPlacar}) {
+  //   //print('func getSingleScore, pessoa: $pessoa, qualPlacar: $qualPlacar');
+  //   int contagemVitorias = placarUnoBox.get(pessoa)[qualPlacar];
+  //   Map keyToString = {
+  //     'primeiroLugar': '1º',
+  //     'segundoLugar': '2º',
+  //     'terceiroLugar': '3º',
+  //     'quartoLugar': '4º',
+  //   };
+  //   if (pessoa.isEmpty || pessoa == null) {
+  //     return "vc esqueceu o argumento 'pessoa'";
+  //   } else if (qualPlacar.isEmpty || qualPlacar == null) {
+  //     return "vc esqueceu o argumento 'qualPlacar'";
+  //   } else {
+  //     if (contagemVitorias == 0 || contagemVitorias == 1) {
+  //       return "$contagemVitorias vitória   no ${keyToString[qualPlacar]} lugar\n";
+  //     } else if (contagemVitorias > 1) {
+  //       return "$contagemVitorias vitórias no ${keyToString[qualPlacar]} lugar\n";
+  //     } else {
+  //       return "Erro não esperado";
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +79,7 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
                 thickness: 2,
               ),
               ValueListenableBuilder(
-                valueListenable: placarUnoBox.listenable(),
+                valueListenable: boxJogatinas.listenable(),
                 builder: (context, value, child) {
                   return ListView.separated(
                     separatorBuilder: (context, index) => Divider(
@@ -121,31 +90,42 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: 4,
                     itemBuilder: (BuildContext context, int index) {
-                      List keysInList = placarUnoBox.keys.toList();
-                      //print(index);
-                      //print(keysInList);
-                      //print(keysInList[index]);
-                      var key = keysInList[index];
-                      int placarTotal = placarUnoBox.get(key)['placarTotal'];
+                      String jogador = jogatina.players[index];
                       return ListTile(
-                        title: Text(keysInList[index]),
-                        trailing: Text(placarTotal.toString() +
-                            (placarTotal > 1 ? " pontos" : ' ponto')),
+                        title: Text(jogador),
+                        trailing: Text(jogatina
+                                .pontuacaoTotalDosJogadores[jogador]
+                                .toString() +
+                            ' pontos'),
                         subtitle: Text(
-                          getSingleScore(
-                                  pessoa: keysInList[index],
-                                  qualPlacar: 'primeiroLugar') +
-                              getSingleScore(
-                                  pessoa: keysInList[index],
-                                  qualPlacar: 'segundoLugar') +
-                              getSingleScore(
-                                  pessoa: keysInList[index],
-                                  qualPlacar: 'terceiroLugar') +
-                              getSingleScore(
-                                  pessoa: keysInList[index],
-                                  qualPlacar: 'quartoLugar'),
-                        ),
+                            'TODO, aqui vai quantas vezes vc ganhou em qual posição'),
                       );
+
+                      // List keysInList = placarUnoBox.keys.toList();
+                      // //print(index);
+                      // //print(keysInList);
+                      // //print(keysInList[index]);
+                      // var key = keysInList[index];
+                      // int placarTotal = placarUnoBox.get(key)['placarTotal'];
+                      // return ListTile(
+                      //   title: Text(keysInList[index]),
+                      //   trailing: Text(placarTotal.toString() +
+                      //       (placarTotal > 1 ? " pontos" : ' ponto')),
+                      //   subtitle: Text(
+                      //     getSingleScore(
+                      //             pessoa: keysInList[index],
+                      //             qualPlacar: 'primeiroLugar') +
+                      //         getSingleScore(
+                      //             pessoa: keysInList[index],
+                      //             qualPlacar: 'segundoLugar') +
+                      //         getSingleScore(
+                      //             pessoa: keysInList[index],
+                      //             qualPlacar: 'terceiroLugar') +
+                      //         getSingleScore(
+                      //             pessoa: keysInList[index],
+                      //             qualPlacar: 'quartoLugar'),
+                      //   ),
+                      // );
                     },
                   );
                 },
@@ -155,47 +135,7 @@ class _ListaDeJogadoresState extends State<ListaDeJogadores> {
                 thickness: 2,
               ),
               SizedBox(height: 60),
-              RaisedButton(
-                onPressed: () {
-                  if (placarUnoBox.get('alan') != null) {
-                    placarUnoBox.put('alan', {
-                      'placarTotal': 0,
-                      'primeiroLugar': 0,
-                      'segundoLugar': 0,
-                      'terceiroLugar': 0,
-                      'quartoLugar': 0
-                    });
-                  }
-                  if (placarUnoBox.get('guilherme') != null) {
-                    placarUnoBox.put('guilherme', {
-                      'placarTotal': 0,
-                      'primeiroLugar': 0,
-                      'segundoLugar': 0,
-                      'terceiroLugar': 0,
-                      'quartoLugar': 0
-                    });
-                  }
-                  if (placarUnoBox.get('joao') != null) {
-                    placarUnoBox.put('joao', {
-                      'placarTotal': 0,
-                      'primeiroLugar': 0,
-                      'segundoLugar': 0,
-                      'terceiroLugar': 0,
-                      'quartoLugar': 0
-                    });
-                  }
-                  if (placarUnoBox.get('tomas') != null) {
-                    placarUnoBox.put('tomas', {
-                      'placarTotal': 0,
-                      'primeiroLugar': 0,
-                      'segundoLugar': 0,
-                      'terceiroLugar': 0,
-                      'quartoLugar': 0
-                    });
-                  }
-                },
-                child: Text('Deletar TUDO'),
-              )
+              
             ],
           ),
         ),

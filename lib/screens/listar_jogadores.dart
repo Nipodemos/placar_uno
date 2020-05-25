@@ -79,7 +79,7 @@ class _ListarJogadoresState extends State<ListarJogadores> {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: RaisedButton(
-                    onPressed: () async {
+                    onPressed: () {
                       List<String> jogadoresSelecionados = [];
                       quaisEstaoSelecionados.forEach((key, value) {
                         if (value == true) jogadoresSelecionados.add(key);
@@ -88,13 +88,18 @@ class _ListarJogadoresState extends State<ListarJogadores> {
                       Jogatina jogatina =
                           Jogatina(jogadores: jogadoresSelecionados);
                       Box boxJogatinaAtual = Hive.box('jogatinaAtual');
-                      int indexJogatinaAtual = await jogatina.salvar();
-                      boxJogatinaAtual.put('index', indexJogatinaAtual);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => JogatinaEmAndamento()),
-                      );
+                      int indexJogatinaAtual;
+                      jogatina.salvar().then((value) {
+                        indexJogatinaAtual = value;
+                        boxJogatinaAtual.delete('index');
+
+                        boxJogatinaAtual.put('indice', indexJogatinaAtual);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => JogatinaEmAndamento()),
+                        );
+                      });
                     },
                     child: Text('Terminei de escolher'),
                   ),

@@ -3,7 +3,6 @@ import 'package:hive/hive.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:placar_uno/models/jogatina.dart';
-import 'adicionar_vitoria.dart';
 
 class JogatinaEmAndamento extends StatefulWidget {
   @override
@@ -11,17 +10,16 @@ class JogatinaEmAndamento extends StatefulWidget {
 }
 
 class _JogatinaEmAndamentoState extends State<JogatinaEmAndamento> {
-  bool mostrarTelaAddPlacar = false;
-  Box boxJogatinaAtual;
+  num indexJogatinaAtual;
   Box boxJogatinas;
   Jogatina jogatina;
 
   @override
   void initState() {
     super.initState();
-    boxJogatinaAtual = Hive.box('jogatinaAtual');
+    indexJogatinaAtual = Hive.box('jogatinaAtual').get('indice') as num;
     boxJogatinas = Hive.box('jogatinas');
-    jogatina = boxJogatinas.getAt(boxJogatinaAtual.get('index'));
+    jogatina = boxJogatinas.getAt(indexJogatinaAtual);
   }
 
   // String getSingleScore({String pessoa, String qualPlacar}) {
@@ -56,88 +54,50 @@ class _JogatinaEmAndamentoState extends State<JogatinaEmAndamento> {
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RaisedButton(
-                child: Text(mostrarTelaAddPlacar
-                    ? "Fechar tela placar"
-                    : "Abrir tela placar"),
-                onPressed: () {
-                  mostrarTelaAddPlacar = !mostrarTelaAddPlacar;
-                  setState(() {});
-                },
-              ),
-              AnimatedContainer(
-                duration: Duration(milliseconds: 600),
-                height: mostrarTelaAddPlacar ? 320 : 0,
-                child: mostrarTelaAddPlacar ? AdicionarVitoria() : Text(''),
-              ),
-              Divider(
-                color: Colors.orange,
-                thickness: 2,
-              ),
-              ValueListenableBuilder(
-                valueListenable: boxJogatinas.listenable(),
-                builder: (context, value, child) {
-                  return ListView.separated(
-                    separatorBuilder: (context, index) => Divider(
-                      color: Colors.orange,
-                      thickness: 2,
-                    ),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 4,
-                    itemBuilder: (BuildContext context, int index) {
-                      String jogador = jogatina.jogadores[index];
-                      return ListTile(
-                        title: Text(jogador),
-                        trailing: Text(jogatina
-                                .pontuacaoTotalDosJogadores[jogador]
-                                .toString() +
-                            ' pontos'),
-                        subtitle: Text(
-                            'TODO, aqui vai quantas vezes vc ganhou em qual posição'),
-                      );
-
-                      // List keysInList = placarUnoBox.keys.toList();
-                      // //print(index);
-                      // //print(keysInList);
-                      // //print(keysInList[index]);
-                      // var key = keysInList[index];
-                      // int placarTotal = placarUnoBox.get(key)['placarTotal'];
-                      // return ListTile(
-                      //   title: Text(keysInList[index]),
-                      //   trailing: Text(placarTotal.toString() +
-                      //       (placarTotal > 1 ? " pontos" : ' ponto')),
-                      //   subtitle: Text(
-                      //     getSingleScore(
-                      //             pessoa: keysInList[index],
-                      //             qualPlacar: 'primeiroLugar') +
-                      //         getSingleScore(
-                      //             pessoa: keysInList[index],
-                      //             qualPlacar: 'segundoLugar') +
-                      //         getSingleScore(
-                      //             pessoa: keysInList[index],
-                      //             qualPlacar: 'terceiroLugar') +
-                      //         getSingleScore(
-                      //             pessoa: keysInList[index],
-                      //             qualPlacar: 'quartoLugar'),
-                      //   ),
-                      // );
-                    },
-                  );
-                },
-              ),
-              Divider(
-                color: Colors.orange,
-                thickness: 2,
-              ),
-              SizedBox(height: 60),
-              
-            ],
-          ),
+        child: Column(
+          children: [
+            RaisedButton(
+              child: Text("Terminou uma partida"),
+              onPressed: () {
+                setState(() {});
+              },
+            ),
+            Divider(
+              color: Colors.orange,
+              thickness: 2,
+            ),
+            ValueListenableBuilder(
+              valueListenable: boxJogatinas.listenable(),
+              builder: (context, value, child) {
+                return ListView.separated(
+                  separatorBuilder: (context, index) => Divider(
+                    color: Colors.orange,
+                    thickness: 2,
+                  ),
+                  shrinkWrap: true,
+                  itemCount: jogatina.quantidadeDejogadores,
+                  itemBuilder: (BuildContext context, int index) {
+                    String jogador = jogatina.jogadores[index];
+                    return ListTile(
+                      title: Text(jogador),
+                      trailing: Text(jogatina
+                              .pontuacaoTotalDosJogadores[jogador]
+                              .toString() +
+                          ' pontos'),
+                      subtitle: Text(
+                          // TODO fazer isso aqui
+                          'TODO, aqui vai quantas vezes vc ganhou em qual posição'),
+                    );
+                  },
+                );
+              },
+            ),
+            Divider(
+              color: Colors.orange,
+              thickness: 2,
+            ),
+            SizedBox(height: 60),
+          ],
         ),
       ),
     );

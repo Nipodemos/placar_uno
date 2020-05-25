@@ -17,7 +17,7 @@ class JogatinaAdapter extends TypeAdapter<Jogatina> {
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Jogatina(
-      players: (fields[5] as List)?.cast<String>(),
+      jogadores: (fields[5] as List)?.cast<String>(),
     )
       ..quantidadeDePartidas = fields[0] as int
       ..dataInicio = fields[1] as DateTime
@@ -26,7 +26,7 @@ class JogatinaAdapter extends TypeAdapter<Jogatina> {
           ?.map((dynamic e) => (e as Map)?.cast<String, int>())
           ?.toList()
       ..pontuacaoTotalDosJogadores = (fields[4] as Map)?.cast<String, int>()
-      ..quantidadeDePlayers = fields[6] as int
+      ..quantidadeDejogadores = fields[6] as int
       ..completado = fields[7] as bool;
   }
 
@@ -45,9 +45,9 @@ class JogatinaAdapter extends TypeAdapter<Jogatina> {
       ..writeByte(4)
       ..write(obj.pontuacaoTotalDosJogadores)
       ..writeByte(5)
-      ..write(obj.players)
+      ..write(obj.jogadores)
       ..writeByte(6)
-      ..write(obj.quantidadeDePlayers)
+      ..write(obj.quantidadeDejogadores)
       ..writeByte(7)
       ..write(obj.completado);
   }

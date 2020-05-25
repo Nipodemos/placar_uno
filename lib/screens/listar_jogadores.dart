@@ -86,7 +86,7 @@ class _ListarJogadoresState extends State<ListarJogadores> {
                       });
                       print(jogadoresSelecionados);
                       Jogatina jogatina =
-                          Jogatina(players: jogadoresSelecionados);
+                          Jogatina(jogadores: jogadoresSelecionados);
                       Box boxJogatinaAtual = Hive.box('jogatinaAtual');
                       int indexJogatinaAtual = await jogatina.salvar();
                       boxJogatinaAtual.put('index', indexJogatinaAtual);

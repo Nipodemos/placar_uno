@@ -90,7 +90,7 @@ class _JogatinaEmAndamentoState extends State<JogatinaEmAndamento> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: 4,
                     itemBuilder: (BuildContext context, int index) {
-                      String jogador = jogatina.players[index];
+                      String jogador = jogatina.jogadores[index];
                       return ListTile(
                         title: Text(jogador),
                         trailing: Text(jogatina

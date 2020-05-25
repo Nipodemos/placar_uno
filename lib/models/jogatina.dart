@@ -6,38 +6,46 @@ part 'jogatina.g.dart';
 @HiveType(typeId: 2)
 class Jogatina {
   @HiveField(0)
-  int quantidadeDePartidas;
+  int quantidadeDePartidas = 0;
 
   @HiveField(1)
-  DateTime dataInicio;
+  DateTime dataInicio = DateTime.now();
 
   @HiveField(2)
-  DateTime dataFim;
+  DateTime dataFim = DateTime.now();
 
   @HiveField(3)
-  List<Map<String, int>> partidas;
+  List<Map<String, int>> partidas = [];
 
   @HiveField(4)
-  Map<String, int> pontuacaoTotalDosJogadores;
+  Map<String, int> pontuacaoTotalDosJogadores = {};
 
   @HiveField(5)
-  List<String> players;
+  List<String> jogadores = [];
 
   @HiveField(6)
-  int quantidadeDePlayers;
+  int quantidadeDejogadores;
 
   @HiveField(7)
   bool completado = false;
 
-  Jogatina({@required this.players}) : assert(players.length > 0) {
-    partidas ??= [];
-    quantidadeDePartidas = partidas.length;
-    quantidadeDePlayers = players.length;
+  Jogatina({@required this.jogadores, int index})
+      : assert(jogadores.length > 0) {
+    if (index != null) {
+    } else {
+      partidas ??= [];
+      quantidadeDePartidas = partidas.length;
+      quantidadeDejogadores = jogadores.length;
+      jogadores.forEach((element) {
+        pontuacaoTotalDosJogadores[element] = 0;
+      });
+    }
   }
 
   Future salvar({int index}) async {
     Box boxJogatina = Hive.box('jogatinas');
     if (index != null) {
+      print(this);
       return await boxJogatina.add(this);
     } else {
       return await boxJogatina.putAt(index, this);

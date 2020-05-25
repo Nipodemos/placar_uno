@@ -44,12 +44,13 @@ class Jogatina {
 
   Future salvar({int index}) async {
     Box boxJogatina = Hive.box('jogatinas');
-    if (index != null) {
+    if (index == null) {
       print(this);
-      return await boxJogatina.add(this);
+      index = await boxJogatina.add(this);
     } else {
-      return await boxJogatina.putAt(index, this);
+      await boxJogatina.putAt(index, this);
     }
+    return index;
   }
 
   void printJogatinaData(index) {

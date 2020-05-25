@@ -7,12 +7,12 @@ class AdicionarVitoria extends StatefulWidget {
 }
 
 class _AdicionarVitoriaState extends State<AdicionarVitoria> {
-  Box<Map> placarUnoBox;
+  Box placarUnoBox;
 
   @override
   void initState() {
     super.initState();
-    placarUnoBox = Hive.box<Map>("placarUno");
+    placarUnoBox = Hive.box("placarUno");
   }
 
   @override
@@ -128,12 +128,12 @@ class RadioPositionInScore extends StatefulWidget {
 }
 
 class _RadioPositionInScoreState extends State<RadioPositionInScore> {
-  Box<Map> placarUnoBox;
+  Box placarUnoBox;
 
   @override
   void initState() {
     super.initState();
-    placarUnoBox = Hive.box<Map>("placarUno");
+    placarUnoBox = Hive.box("placarUno");
     if (placarUnoBox.get('valoresContainerDefinirPlacar') == null) {
       placarUnoBox.put(
         'valoresContainerDefinirPlacar',

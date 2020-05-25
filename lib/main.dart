@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:placar_uno/models/jogatina.dart';
-import 'package:placar_uno/screens/home.dart';
 
 import 'screens/definir_vencedores.dart';
 

@@ -10,59 +10,60 @@ class DefinirVencedores extends StatefulWidget {
 }
 
 class _DefinirVencedoresState extends State<DefinirVencedores> {
-  List<Slide> slides = new List();
-  num indexJogatinaAtual;
+  List<Slide> slides = [];
+  int indexJogatinaAtual;
   Box boxJogatinas;
   Jogatina jogatina;
+  Map<String, int> vencedores = {};
 
   @override
   void initState() {
-    super.initState();
-
-    indexJogatinaAtual = Hive.box('jogatinaAtual').get('indice') as num;
+    Box boxIndexJogatina = Hive.box('jogatinaAtual');
+    indexJogatinaAtual = boxIndexJogatina.get('indice');
     boxJogatinas = Hive.box('jogatinas');
     jogatina = boxJogatinas.getAt(indexJogatinaAtual);
 
-    jogatina.jogadores.forEach((element) {
+    jogatina.jogadores.forEach((jogador) {
+      vencedores.addAll({jogador: 0});
       slides.add(
         Slide(
-            title: element + " venceu em qual posição?",
-            description: "Diz aí qual foi!",
-            centerWidget: ListView.builder(
-                itemCount: jogatina.jogadores.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text((index + 1).toString() + "º lugar",),
-                    leading: Radio(value: null, groupValue: null, onChanged: null),
-                  );
-                })),
+          title: jogador + " venceu em qual posição?",
+          maxLineTitle: 2,
+          backgroundColor: Color(0xfff5a623),
+          centerWidget: Column(
+            children: jogatina.jogadores.map((element) {
+              int index = jogatina.jogadores.indexOf(element);
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    print('toque detectado');
+                    vencedores[jogador] = index + 1;
+                  });
+                },
+                child: Row(
+                  children: [
+                    Radio(
+                      value: index + 1,
+                      groupValue: vencedores[jogador],
+                      onChanged: (int newValue) {
+                        setState(() {
+                          vencedores[jogador] = newValue;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      (index + 1).toString() + "º lugar",
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ),
       );
     });
-
-    slides.add(
-      new Slide(
-        title: "ERASER",
-        description:
-            "Allow miles wound place the leave had. To sitting subject no improve studied limited",
-        backgroundColor: Color(0xfff5a623),
-      ),
-    );
-    slides.add(
-      new Slide(
-        title: "PENCIL",
-        description:
-            "Ye indulgence unreserved connection alteration appearance",
-        backgroundColor: Color(0xff203152),
-      ),
-    );
-    slides.add(
-      new Slide(
-        title: "RULER",
-        description:
-            "Much evil soon high in hope do view. Out may few northward believing attempted. Yet timed being songs marry one defer men our. Although finished blessing do of",
-        backgroundColor: Color(0xff9932CC),
-      ),
-    );
+    super.initState();
   }
 
   void onDonePress() {
@@ -71,9 +72,18 @@ class _DefinirVencedoresState extends State<DefinirVencedores> {
 
   @override
   Widget build(BuildContext context) {
-    return new IntroSlider(
-      slides: this.slides,
-      onDonePress: this.onDonePress,
-    );
+    if (indexJogatinaAtual == null) {
+      return Center(
+        child: Text('treta'),
+      );
+    } else {
+      return IntroSlider(
+        slides: slides,
+        onDonePress: onDonePress,
+        isShowSkipBtn: false,
+        isShowPrevBtn: true,
+        isScrollable: true,
+      );
+    }
   }
 }

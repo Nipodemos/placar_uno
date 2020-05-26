@@ -3,7 +3,8 @@ import 'package:hive/hive.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
 import 'package:placar_uno/models/jogatina.dart';
-import 'package:placar_uno/screens/oldWorkingScreen.dart';
+
+import 'jogatina_em_andamento.dart';
 
 Map<String, int> vencedores = {};
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:placar_uno/models/jogatina.dart';
+import '../models/jogatina.dart';
 
-import 'oldWorkingScreen.dart';
+import 'jogatina_em_andamento.dart';
 
 class ListarJogadores extends StatefulWidget {
   @override
@@ -135,7 +135,6 @@ class _ListarJogadoresState extends State<ListarJogadores> {
                             onPressed: () {
                               _formKey.currentState.save();
                               boxJogadores.add(_nomeNovoPlayer);
-
                               Navigator.pop(context);
                             },
                             child: Text('Salvar'),

@@ -135,7 +135,6 @@ class _ListarJogadoresState extends State<ListarJogadores> {
                             onPressed: () {
                               _formKey.currentState.save();
                               boxJogadores.add(_nomeNovoPlayer);
-
                               Navigator.pop(context);
                             },
                             child: Text('Salvar'),

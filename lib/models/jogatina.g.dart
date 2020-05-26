@@ -25,7 +25,6 @@ class JogatinaAdapter extends TypeAdapter<Jogatina> {
       ..partidas = (fields[3] as List)
           ?.map((dynamic e) => (e as Map)?.cast<String, int>())
           ?.toList()
-      ..pontuacaoTotalDosJogadores = (fields[4] as Map)?.cast<String, int>()
       ..quantidadeDejogadores = fields[6] as int
       ..completado = fields[7] as bool;
   }
@@ -33,7 +32,7 @@ class JogatinaAdapter extends TypeAdapter<Jogatina> {
   @override
   void write(BinaryWriter writer, Jogatina obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.quantidadeDePartidas)
       ..writeByte(1)
@@ -42,8 +41,6 @@ class JogatinaAdapter extends TypeAdapter<Jogatina> {
       ..write(obj.dataFim)
       ..writeByte(3)
       ..write(obj.partidas)
-      ..writeByte(4)
-      ..write(obj.pontuacaoTotalDosJogadores)
       ..writeByte(5)
       ..write(obj.jogadores)
       ..writeByte(6)

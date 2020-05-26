@@ -17,9 +17,6 @@ class Jogatina {
   @HiveField(3)
   List<Map<String, int>> partidas = [];
 
-  @HiveField(4)
-  Map<String, int> pontuacaoTotalDosJogadores = {};
-
   @HiveField(5)
   List<String> jogadores = [];
 
@@ -36,9 +33,6 @@ class Jogatina {
       partidas ??= [];
       quantidadeDePartidas = partidas.length;
       quantidadeDejogadores = jogadores.length;
-      jogadores.forEach((element) {
-        pontuacaoTotalDosJogadores[element] = 0;
-      });
     }
   }
 

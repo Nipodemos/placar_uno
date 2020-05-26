@@ -5,12 +5,12 @@ import 'package:placar_uno/models/jogatina.dart';
 
 import 'screens/definir_vencedores.dart';
 import 'screens/home.dart';
+import 'screens/oldWorkingScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(JogatinaAdapter());
-  await Hive.openBox("placarUno");
   await Hive.openBox("jogatinas");
   await Hive.openBox("jogadores");
   await Hive.openBox("jogatinaAtual");
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: DefinirVencedores(),
+      home: JogatinaEmAndamento(),
     );
   }
 }

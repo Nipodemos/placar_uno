@@ -38,29 +38,41 @@ class _JogatinaEmAndamentoState extends State<JogatinaEmAndamento> {
     });
   }
 
-  // String getSingleScore({String pessoa, String qualPlacar}) {
-  //   //print('func getSingleScore, pessoa: $pessoa, qualPlacar: $qualPlacar');
-  //   int contagemVitorias = placarUnoBox.get(pessoa)[qualPlacar];
-  //   Map keyToString = {
-  //     'primeiroLugar': '1º',
-  //     'segundoLugar': '2º',
-  //     'terceiroLugar': '3º',
-  //     'quartoLugar': '4º',
-  //   };
-  //   if (pessoa.isEmpty || pessoa == null) {
-  //     return "vc esqueceu o argumento 'pessoa'";
-  //   } else if (qualPlacar.isEmpty || qualPlacar == null) {
-  //     return "vc esqueceu o argumento 'qualPlacar'";
-  //   } else {
-  //     if (contagemVitorias == 0 || contagemVitorias == 1) {
-  //       return "$contagemVitorias vitória   no ${keyToString[qualPlacar]} lugar\n";
-  //     } else if (contagemVitorias > 1) {
-  //       return "$contagemVitorias vitórias no ${keyToString[qualPlacar]} lugar\n";
-  //     } else {
-  //       return "Erro não esperado";
-  //     }
-  //   }
-  // }
+  /// Pega a quantidade de vezes que o jogador venceu em cada posição
+  ///
+  /// Primeio preciso dar um loop sobre cada partida
+  /// em cada partida eu pego a posição que ele venceu
+  /// e vou adicionando a um contador
+  /// no final fica algo tipo assim
+  /// a esquer a posição, a direita a quantidade de vezes
+  /// que o jogador venceu na posição
+  /// ```json
+  /// {
+  ///   1: 3
+  ///   2: 5
+  ///   3: 0
+  ///   4: 2
+  /// }
+  /// ```
+  ///
+  /// depois é tudo convertido para uma string
+  String pegarAsVitorias({String jogador}) {
+    String finalString = '';
+    Map<int, int> quaisPosicoes = {};
+    jogatina.partidas.forEach((partida) {
+      int posicaoAtual = partida[jogador];
+      //quando for null, começa com 0 pra poder usar o ++
+      quaisPosicoes[posicaoAtual] ??= 0;
+      quaisPosicoes[posicaoAtual]++;
+    });
+    for (var i = 1; i <= jogatina.jogadores.length; i++) {
+      finalString += 'Venci ${quaisPosicoes[i]} vezes em $i\º lugar\n';
+    }
+
+    // removendo o último \n da string, já que criaria uma linha em branco
+    // desnecessária
+    return finalString.allBefore(RegExp("\\n\$"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,9 +116,7 @@ class _JogatinaEmAndamentoState extends State<JogatinaEmAndamento> {
                       trailing: Text(
                           pontuacaoTotalDosJogadores[jogador].toString() +
                               ' pontos'),
-                      subtitle: Text(
-                          // TODO fazer isso aqui
-                          'TODO, aqui vai quantas vezes vc ganhou em qual posição'),
+                      subtitle: Text(pegarAsVitorias(jogador: jogador)),
                     );
                   },
                 );

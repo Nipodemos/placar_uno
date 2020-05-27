@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-
+import 'package:supercharged/supercharged.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:placar_uno/models/jogatina.dart';
 
@@ -86,13 +86,11 @@ class _JogatinaEmAndamentoState extends State<JogatinaEmAndamento> {
           children: [
             RaisedButton(
               child: Text("Terminou uma partida"),
-              onPressed: () async {
+              onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => DefinirVencedores()),
-                ).then((_) {
-                  setState(() {});
-                });
+                );
               },
             ),
             Divider(

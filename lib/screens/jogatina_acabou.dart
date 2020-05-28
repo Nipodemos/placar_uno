@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:placar_uno/models/jogatina.dart';
-import 'package:placar_uno/screens/home.dart';
 import 'package:timeago/timeago.dart' as TimeAgo;
+
+import 'home_page.dart';
 
 class EstatisticasDaJogatinaAcabada extends StatelessWidget {
   String stringfyPontosDosVencedores(Jogatina jogatina) {

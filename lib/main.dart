@@ -5,6 +5,7 @@ import 'package:placar_uno/models/jogatina.dart';
 
 import 'screens/definir_vencedores.dart';
 import 'screens/home.dart';
+import 'screens/jogatina_acabou.dart';
 import 'screens/jogatina_em_andamento.dart';
 
 void main() async {

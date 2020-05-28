@@ -91,7 +91,6 @@ class _ListarJogadoresState extends State<ListarJogadores> {
                       int indexJogatinaAtual;
                       jogatina.salvar().then((value) {
                         indexJogatinaAtual = value;
-                        boxJogatinaAtual.delete('index');
 
                         boxJogatinaAtual.put('indice', indexJogatinaAtual);
                         Navigator.push(

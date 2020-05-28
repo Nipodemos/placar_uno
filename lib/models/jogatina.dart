@@ -5,9 +5,6 @@ part 'jogatina.g.dart';
 
 @HiveType(typeId: 2)
 class Jogatina {
-  @HiveField(0)
-  int quantidadeDePartidas = 0;
-
   @HiveField(1)
   DateTime dataInicio = DateTime.now();
 
@@ -15,13 +12,10 @@ class Jogatina {
   DateTime dataFim = DateTime.now();
 
   @HiveField(3)
-  List<Map<String, int>> partidas = [];
+  List<Map<String, int>> resultadoPartidas = [];
 
   @HiveField(5)
   List<String> jogadores = [];
-
-  @HiveField(6)
-  int quantidadeDejogadores;
 
   @HiveField(7)
   bool completado = false;
@@ -30,9 +24,7 @@ class Jogatina {
       : assert(jogadores.length > 0) {
     if (index != null) {
     } else {
-      partidas ??= [];
-      quantidadeDePartidas = partidas.length;
-      quantidadeDejogadores = jogadores.length;
+      resultadoPartidas ??= [];
     }
   }
 

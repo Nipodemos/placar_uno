@@ -40,7 +40,7 @@ class _DefinirVencedoresState extends State<DefinirVencedores> {
   }
 
   void onDonePress() {
-    jogatina.partidas.add(vencedores);
+    jogatina.resultadoPartidas.add(vencedores);
     jogatina.salvar(index: indexJogatinaAtual);
     vencedores = {};
     Navigator.push(

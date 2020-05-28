@@ -10,10 +10,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Box boxJogatinaAtual = Hive.box('jogatinaAtual');
+  Box boxJogatinaAtual;
+  int indexJogatinaAtual;
+
+  @override
+  void initState() {
+    boxJogatinaAtual = Hive.box('jogatinaAtual');
+    indexJogatinaAtual = boxJogatinaAtual.get('indice') as num;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    boxJogatinaAtual = Hive.box('jogatinaAtual');
     return Scaffold(
       appBar: AppBar(
         title: Text('Placar Uno'),
@@ -29,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                 'Placar Uno',
                 style: TextStyle(fontSize: 28),
               ),
-              if (boxJogatinaAtual.get('indice') == null)
+              if (indexJogatinaAtual == null)
                 RaisedButton(
                   child: Text('Nova Jogatina'),
                   onPressed: () {

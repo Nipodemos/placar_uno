@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
-import 'package:placar_uno/models/jogatina.dart';
+import 'package:placar_uno/models/jogatina_model.dart';
 
 import 'jogatina_em_andamento.dart';
 
 Map<String, int> vencedores = {};
 
-class DefinirVencedores extends StatefulWidget {
-  @override
-  _DefinirVencedoresState createState() => _DefinirVencedoresState();
-}
 
-class _DefinirVencedoresState extends State<DefinirVencedores> {
+class DefinirVencedores extends StatelessWidget {
   List<Slide> slides = [];
   int indexJogatinaAtual;
   Box boxJogatinas;
-  Jogatina jogatina;
+  JogatinaModel jogatina;
 
-  @override
-  void initState() {
     Box boxIndexJogatina = Hive.box('jogatinaAtual');
     indexJogatinaAtual = boxIndexJogatina.get('indice');
     boxJogatinas = Hive.box('jogatinas');
@@ -36,17 +31,12 @@ class _DefinirVencedoresState extends State<DefinirVencedores> {
         ),
       );
     });
-    super.initState();
-  }
 
   void onDonePress() {
     jogatina.resultadoPartidas.add(vencedores);
     jogatina.salvar(index: indexJogatinaAtual);
     vencedores = {};
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => JogatinaEmAndamento()),
-    );
+    Get.to(JogatinaEmAndamento());
   }
 
   @override
@@ -77,7 +67,7 @@ class VenceuEmQualPosicao extends StatefulWidget {
 class _VenceuEmQualPosicaoState extends State<VenceuEmQualPosicao> {
   int indexJogatinaAtual;
   Box boxJogatinas;
-  Jogatina jogatina;
+  JogatinaModel jogatina;
   @override
   void initState() {
     Box boxIndexJogatina = Hive.box('jogatinaAtual');

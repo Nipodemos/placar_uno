@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'jogatina.dart';
+part of 'jogatina_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class JogatinaAdapter extends TypeAdapter<Jogatina> {
+class JogatinaModelAdapter extends TypeAdapter<JogatinaModel> {
   @override
   final typeId = 2;
 
   @override
-  Jogatina read(BinaryReader reader) {
+  JogatinaModel read(BinaryReader reader) {
     var numOfFields = reader.readByte();
     var fields = <int, dynamic>{
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Jogatina(
+    return JogatinaModel(
       jogadores: (fields[5] as List)?.cast<String>(),
     )
       ..dataInicio = fields[1] as DateTime
@@ -28,7 +28,7 @@ class JogatinaAdapter extends TypeAdapter<Jogatina> {
   }
 
   @override
-  void write(BinaryWriter writer, Jogatina obj) {
+  void write(BinaryWriter writer, JogatinaModel obj) {
     writer
       ..writeByte(5)
       ..writeByte(1)

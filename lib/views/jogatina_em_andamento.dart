@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:placar_uno/screens/jogatina_acabou.dart';
+import 'package:placar_uno/views/jogatina_acabou.dart';
 import 'package:supercharged/supercharged.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:placar_uno/models/jogatina.dart';
+import 'package:placar_uno/models/jogatina_model.dart';
 
 import 'definir_vencedores.dart';
 
@@ -26,7 +26,7 @@ class JogatinaEmAndamento extends StatelessWidget {
   /// ```
   ///
   /// depois é tudo convertido para uma string
-  String pegarAsVitorias({String jogador, Jogatina jogatina}) {
+  String pegarAsVitorias({String jogador, JogatinaModel jogatina}) {
     Map<int, int> quaisPosicoes;
     String finalString = '';
 
@@ -50,7 +50,7 @@ class JogatinaEmAndamento extends StatelessWidget {
     final Box boxJogatinaAtual = Hive.box('jogatinaAtual');
     final Box boxJogatinas = Hive.box('jogatinas');
     final int indexJogatinaAtual = boxJogatinaAtual.get('indice');
-    Jogatina jogatina = boxJogatinas.getAt(indexJogatinaAtual);
+    JogatinaModel jogatina = boxJogatinas.getAt(indexJogatinaAtual);
 
     jogatina.resultadoPartidas.forEach((Map<String, int> partida) {
       partida.forEach((nomeJogador, posicaoNaPartida) {

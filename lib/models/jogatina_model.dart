@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
-part 'jogatina.g.dart';
+part 'jogatina_model.g.dart';
 
 @HiveType(typeId: 2)
-class Jogatina {
+class JogatinaModel {
   @HiveField(1)
   DateTime dataInicio = DateTime.now();
 
@@ -20,28 +20,12 @@ class Jogatina {
   @HiveField(7)
   bool completado = false;
 
-  Jogatina({@required this.jogadores, int index})
+  JogatinaModel({@required this.jogadores, int index})
       : assert(jogadores.length > 0) {
     if (index != null) {
     } else {
       resultadoPartidas ??= [];
     }
   }
-
-  Future salvar({int index}) async {
-    Box boxJogatina = Hive.box('jogatinas');
-    if (index == null) {
-      print(this);
-      index = await boxJogatina.add(this);
-    } else {
-      await boxJogatina.putAt(index, this);
-    }
-    return index;
-  }
-
-  void printJogatinaData(index) {
-    Box boxJogatina = Hive.box('jogatina');
-
-    print(boxJogatina.getAt(index));
-  }
+  
 }

@@ -1,16 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'models/jogatina.dart';
-import 'screens/home_page.dart';
+import 'models/jogatina_model.dart';
+
+import 'views/jogatina_acabou.dart';
+import 'views/selecionar_jogadores.dart';
+import 'views/jogatina_em_andamento.dart';
+import 'views/definir_vencedores.dart';
+import 'views/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  Hive.registerAdapter(JogatinaAdapter());
+  Hive.registerAdapter(JogatinaModelAdapter());
   await Hive.openBox("jogatinas");
   await Hive.openBox("jogadores");
   await Hive.openBox("jogatinaAtual");
-  runApp(HomePage());
+  runApp(
+    GetMaterialApp(
+        title: 'Flutter Demo',
+        initialRoute: '/',
+        namedRoutes: {
+          '/': GetRoute(page: HomePage()),
+          '/selecionar_jogadores': GetRoute(page: ListarJogadores()),
+          '/jogatina_em_andamento': GetRoute(page: JogatinaEmAndamento()),
+          '/definir_vencedores': GetRoute(page: DefinirVencedores()),
+          '/jogatina_acabou': GetRoute(page: JogatinaAcabou()),
+        },
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: HomePage()),
+  );
 }

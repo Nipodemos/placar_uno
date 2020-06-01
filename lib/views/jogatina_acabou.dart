@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:placar_uno/models/jogatina.dart';
+import 'package:placar_uno/models/jogatina_model.dart';
 import 'package:timeago/timeago.dart' as TimeAgo;
 
 import 'home_page.dart';
 
-class EstatisticasDaJogatinaAcabada extends StatelessWidget {
-  String stringfyPontosDosVencedores(Jogatina jogatina) {
+class JogatinaAcabou extends StatelessWidget {
+  String stringfyPontosDosVencedores(JogatinaModel jogatina) {
     Map<String, int> pontuacaoTotalDosJogadores = {};
 
     if (jogatina.resultadoPartidas.length < 1) {
@@ -41,7 +41,7 @@ class EstatisticasDaJogatinaAcabada extends StatelessWidget {
     final int indexJogatinaAtual = boxJogatinaAtual.get('indice');
     if (indexJogatinaAtual != null) {
       final Box boxJogatinas = Hive.box('jogatinas');
-      Jogatina jogatina = boxJogatinas.getAt(indexJogatinaAtual);
+      JogatinaModel jogatina = boxJogatinas.getAt(indexJogatinaAtual);
       jogatina.dataFim = DateTime.now();
 
       jogatina.completado = true;

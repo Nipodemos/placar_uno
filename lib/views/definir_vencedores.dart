@@ -18,15 +18,16 @@ class DefinirVencedoresBinding extends Bindings {
 }
 
 class DefinirVencedores extends StatelessWidget {
-  final List<Slide> slides =
-      JogatinaController.to.jogatinaModel.jogadores.map((jogador) {
-    return Slide(
-      title: jogador + " venceu em qual posição?",
-      maxLineTitle: 2,
-      backgroundColor: Color(0xfff5a623),
-      centerWidget: VenceuEmQualPosicao(jogador),
-    );
-  });
+  List<Slide> getSlides() {
+    return JogatinaController.to.jogatinaModel.jogadores.map((jogador) {
+      return Slide(
+        title: jogador + " venceu em qual posição?",
+        maxLineTitle: 2,
+        backgroundColor: Color(0xfff5a623),
+        centerWidget: VenceuEmQualPosicao(jogador),
+      );
+    });
+  }
 
   void onDonePress() {
     JogatinaController.to.jogatinaModel.resultadoPartidas.add(vencedores);
@@ -43,7 +44,7 @@ class DefinirVencedores extends StatelessWidget {
       );
     } else {
       return IntroSlider(
-        slides: slides,
+        slides: getSlides(),
         onDonePress: onDonePress,
         isShowSkipBtn: false,
         isShowPrevBtn: true,

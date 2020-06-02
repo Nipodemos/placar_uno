@@ -25,43 +25,37 @@ class ListarJogadores extends StatelessWidget {
             child: ValueListenableBuilder(
               valueListenable: JogadoresController.to.boxJogadores.listenable(),
               builder: (context, _, child) {
-                return ListView.separated(
-                  itemCount: JogadoresController.to.boxJogadores.values
-                      .toList()
-                      .length,
-                  itemBuilder: (BuildContext context, int index) {
-                    String jogador =
-                        JogadoresController.to.boxJogadores.getAt(index);
-                    // print('ListView.separated item builder, nome player: ' + jogador);
+                return GetBuilder<JogatinaController>(
+                  builder: (controller) => ListView.separated(
+                    itemCount: JogadoresController.to.boxJogadores.values
+                        .toList()
+                        .length,
+                    itemBuilder: (BuildContext context, int index) {
+                      String jogador =
+                          JogadoresController.to.boxJogadores.getAt(index);
+                      // print('ListView.separated item builder, nome player: ' + jogador);
 
-                    JogatinaController.to.selecionados[jogador] ??= false;
-                    return ListTile(
-                      title: Text(jogador, style: TextStyle(fontSize: 20)),
-                      leading: Checkbox(
+                      JogatinaController.to.selecionados[jogador] ??= false;
+                      return CheckboxListTile(
                         value: JogatinaController.to.selecionados[jogador],
-                        onChanged: (bool isSelected) {
-                          JogatinaController.to.selecionados[jogador] =
-                              isSelected;
-                        },
-                      ),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          JogadoresController.to.boxJogadores.deleteAt(index);
-                        },
-                      ),
-                      onTap: () {
-                        JogatinaController.to.selecionados[jogador] =
-                            !JogatinaController.to.selecionados[jogador];
-                      },
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Divider(
-                      color: Colors.orange,
-                      thickness: 2,
-                    );
-                  },
+                        title: Text(jogador, style: TextStyle(fontSize: 20)),
+                        onChanged: (isSelected) =>
+                            controller.alterarSelecionados(isSelected, jogador),
+                        secondary: IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            JogadoresController.to.boxJogadores.deleteAt(index);
+                          },
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Divider(
+                        color: Colors.orange,
+                        thickness: 2,
+                      );
+                    },
+                  ),
                 );
               },
             ),

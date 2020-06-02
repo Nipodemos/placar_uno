@@ -27,7 +27,15 @@ class JogatinaController extends GetController {
     super.onInit();
   }
 
+  void alterarSelecionados(bool isSelected, String jogador) {
+    selecionados[jogador] = isSelected;
+    update(this);
+  }
+
   void calcularPontuacaoTotalDosJogadores() {
+    _jogatinaModel.jogadores.forEach((nomeJogador) {
+      pontuacaoTotalDosJogadores[nomeJogador] ??= 0;
+    });
     _jogatinaModel.resultadoPartidas.forEach((Map<String, int> partida) {
       partida.forEach((nomeJogador, posicaoNaPartida) {
         pontuacaoTotalDosJogadores[nomeJogador] +=
@@ -37,7 +45,7 @@ class JogatinaController extends GetController {
   }
 
   String pegarAsVitorias({String jogador}) {
-    Map<int, int> quaisPosicoes;
+    Map<int, int> quaisPosicoes = {};
     String finalString = '';
 
     _jogatinaModel.resultadoPartidas.forEach((partida) {
@@ -45,7 +53,8 @@ class JogatinaController extends GetController {
       quaisPosicoes[posicaoNaPartidaAtual]++;
     });
     for (var i = 1; i <= _jogatinaModel.jogadores.length; i++) {
-      finalString += 'Venceu ${quaisPosicoes[i] ?? 0} vezes em $i\º lugar\n';
+      quaisPosicoes[i] ??= 0;
+      finalString += 'Venceu ${quaisPosicoes[i]} vezes em $i\º lugar\n';
     }
 
     // removendo o último \n da string, já que criaria uma linha em branco
@@ -72,7 +81,7 @@ class JogatinaController extends GetController {
     boxJogatinas.add(_jogatinaModel).then((value) {
       boxJogatinaAtual.put('indice', value);
       indexJogatinaAtual = value;
-      Get.toNamed('jogatina_em_andamento');
+      Get.offAllNamed('jogatina_em_andamento');
     });
   }
 

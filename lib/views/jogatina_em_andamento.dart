@@ -38,20 +38,22 @@ class JogatinaEmAndamento extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Placar do Uno"),
+        actions: <Widget>[
+          Container(
+            margin: EdgeInsets.all(8),
+            child: RaisedButton(
+              child: Text('Acabou a jogatina'),
+              onPressed: () {
+                Get.offAllNamed('jogatina_acabou');
+              },
+            ),
+          )
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
         child: Column(
           children: [
-            RaisedButton(
-              child: Text("Terminou uma partida"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DefinirVencedores()),
-                );
-              },
-            ),
             Expanded(
               child: Card(
                 color: Colors.blueGrey[100],
@@ -69,17 +71,24 @@ class JogatinaEmAndamento extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) {
                         String jogador = JogatinaController
                             .to.jogatinaModel.jogadores[index];
+                        JogatinaController.to
+                            .calcularPontuacaoTotalDosJogadores();
+                        int pontuacaoTotal = JogatinaController
+                            .to.pontuacaoTotalDosJogadores[jogador];
                         return ListTile(
-                          title: Text(jogador),
-                          trailing: Text(
-                            JogatinaController
-                                    .to.pontuacaoTotalDosJogadores[jogador]
-                                    .toString() +
-                                ' pontos',
+                          title: Text(
+                            jogador,
+                            style: TextStyle(
+                              fontSize: 24,
+                            ),
                           ),
-                          subtitle: Text(
-                            JogatinaController.to
-                                .pegarAsVitorias(jogador: jogador),
+                          trailing: Text(
+                            pontuacaoTotal.toString() +
+                                (pontuacaoTotal < 2 ? ' ponto' : 'pontos'),
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         );
                       },
@@ -90,14 +99,9 @@ class JogatinaEmAndamento extends StatelessWidget {
             ),
             SizedBox(height: 5),
             RaisedButton(
-              child: Text('Enjoamos de jogar'),
+              child: Text('Terminou uma partida'),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => JogatinaAcabou(),
-                  ),
-                );
+                Get.toNamed('definir_vencedores');
               },
             ),
           ],

@@ -23,10 +23,22 @@ void main() async {
         title: 'Flutter Demo',
         initialRoute: '/',
         namedRoutes: {
-          '/': GetRoute(page: HomePage()),
-          '/selecionar_jogadores': GetRoute(page: ListarJogadores()),
-          '/jogatina_em_andamento': GetRoute(page: JogatinaEmAndamento()),
-          '/definir_vencedores': GetRoute(page: DefinirVencedores()),
+          '/': GetRoute(
+            page: HomePage(),
+            binding: HomePageBinding(),
+          ),
+          '/selecionar_jogadores': GetRoute(
+            page: ListarJogadores(),
+            binding: JogadoresBinding(),
+          ),
+          '/jogatina_em_andamento': GetRoute(
+            page: JogatinaEmAndamento(),
+            binding: JogatinaEmAndamentoBinding(),
+          ),
+          '/definir_vencedores': GetRoute(
+            page: DefinirVencedores(),
+            binding: DefinirVencedoresBinding(),
+          ),
           '/jogatina_acabou': GetRoute(page: JogatinaAcabou()),
         },
         theme: ThemeData(

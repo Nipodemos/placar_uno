@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:placar_uno/controllers/jogatina_controller.dart';
 
+class HomePageBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<JogatinaController>(() => JogatinaController());
+  }
+}
+
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,9 +28,8 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 28),
               ),
               GetBuilder<JogatinaController>(
-                init: JogatinaController(),
                 builder: (controller) {
-                  int indexJogatinaAtual = controller.getIndexJogatinaAtual();
+                  int indexJogatinaAtual = controller.indexJogatinaAtual;
 
                   if (indexJogatinaAtual == null) {
                     return RaisedButton(

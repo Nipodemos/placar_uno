@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:get/get.dart';
+import 'package:placar_uno/controllers/jogatina_controller.dart';
 import 'package:placar_uno/models/jogatina_model.dart';
 import 'package:timeago/timeago.dart' as TimeAgo;
 
-import 'home_page.dart';
+class JogatinaAcabouBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<JogatinaController>(() => JogatinaController());
+  }
+}
 
 class JogatinaAcabou extends StatelessWidget {
   String stringfyPontosDosVencedores(JogatinaModel jogatina) {
@@ -37,16 +43,10 @@ class JogatinaAcabou extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Box boxJogatinaAtual = Hive.box('jogatinaAtual');
-    final int indexJogatinaAtual = boxJogatinaAtual.get('indice');
+    final int indexJogatinaAtual = JogatinaController.to.indexJogatinaAtual;
     if (indexJogatinaAtual != null) {
-      final Box boxJogatinas = Hive.box('jogatinas');
-      JogatinaModel jogatina = boxJogatinas.getAt(indexJogatinaAtual);
-      jogatina.dataFim = DateTime.now();
+      JogatinaModel jogatina = JogatinaController.to.jogatinaModel;
 
-      jogatina.completado = true;
-      jogatina.salvar(index: indexJogatinaAtual);
-      boxJogatinaAtual.delete('indice');
       return Scaffold(
         appBar: AppBar(
           title: Text('Tudo sobre essa jogatina'),
@@ -81,10 +81,7 @@ class JogatinaAcabou extends StatelessWidget {
               RaisedButton(
                 child: Text('Voltar para HomePage'),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
+                  Get.toNamed('/');
                 },
               )
             ],

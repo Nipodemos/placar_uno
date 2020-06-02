@@ -3,45 +3,41 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
+import 'package:placar_uno/controllers/jogatina_controller.dart';
 import 'package:placar_uno/models/jogatina_model.dart';
 
 import 'jogatina_em_andamento.dart';
 
 Map<String, int> vencedores = {};
 
+class DefinirVencedoresBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<JogatinaController>(() => JogatinaController());
+  }
+}
 
 class DefinirVencedores extends StatelessWidget {
-  List<Slide> slides = [];
-  int indexJogatinaAtual;
-  Box boxJogatinas;
-  JogatinaModel jogatina;
-
-    Box boxIndexJogatina = Hive.box('jogatinaAtual');
-    indexJogatinaAtual = boxIndexJogatina.get('indice');
-    boxJogatinas = Hive.box('jogatinas');
-    jogatina = boxJogatinas.getAt(indexJogatinaAtual);
-
-    jogatina.jogadores.forEach((jogador) {
-      slides.add(
-        Slide(
-          title: jogador + " venceu em qual posição?",
-          maxLineTitle: 2,
-          backgroundColor: Color(0xfff5a623),
-          centerWidget: VenceuEmQualPosicao(jogador),
-        ),
-      );
-    });
+  final List<Slide> slides =
+      JogatinaController.to.jogatinaModel.jogadores.map((jogador) {
+    return Slide(
+      title: jogador + " venceu em qual posição?",
+      maxLineTitle: 2,
+      backgroundColor: Color(0xfff5a623),
+      centerWidget: VenceuEmQualPosicao(jogador),
+    );
+  });
 
   void onDonePress() {
-    jogatina.resultadoPartidas.add(vencedores);
-    jogatina.salvar(index: indexJogatinaAtual);
+    JogatinaController.to.jogatinaModel.resultadoPartidas.add(vencedores);
+    JogatinaController.to.updateJogatinaAtual();
     vencedores = {};
     Get.to(JogatinaEmAndamento());
   }
 
   @override
   Widget build(BuildContext context) {
-    if (indexJogatinaAtual == null) {
+    if (JogatinaController.to.indexJogatinaAtual == null) {
       return Center(
         child: Text('treta'),
       );

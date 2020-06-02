@@ -8,6 +8,7 @@ class JogadoresBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<JogadoresController>(() => JogadoresController());
+    Get.lazyPut<JogatinaController>(() => JogatinaController());
   }
 }
 
@@ -33,13 +34,13 @@ class ListarJogadores extends StatelessWidget {
                         JogadoresController.to.boxJogadores.getAt(index);
                     // print('ListView.separated item builder, nome player: ' + jogador);
 
-                    JogadoresController.to.selecionados[jogador] ??= false;
+                    JogatinaController.to.selecionados[jogador] ??= false;
                     return ListTile(
                       title: Text(jogador, style: TextStyle(fontSize: 20)),
                       leading: Checkbox(
-                        value: JogadoresController.to.selecionados[jogador],
+                        value: JogatinaController.to.selecionados[jogador],
                         onChanged: (bool isSelected) {
-                          JogadoresController.to.selecionados[jogador] =
+                          JogatinaController.to.selecionados[jogador] =
                               isSelected;
                         },
                       ),
@@ -50,8 +51,8 @@ class ListarJogadores extends StatelessWidget {
                         },
                       ),
                       onTap: () {
-                        JogadoresController.to.selecionados[jogador] =
-                            !JogadoresController.to.selecionados[jogador];
+                        JogatinaController.to.selecionados[jogador] =
+                            !JogatinaController.to.selecionados[jogador];
                       },
                     );
                   },
@@ -68,7 +69,7 @@ class ListarJogadores extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: RaisedButton(
-              onPressed: JogatinaController.to.criarNovaJogatina,
+              onPressed: () => JogatinaController.to.create(),
               child: Text('Terminei de escolher'),
             ),
           )

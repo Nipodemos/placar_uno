@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:placar_uno/controllers/jogatina_controller.dart';
 import 'package:placar_uno/views/jogatina_acabou.dart';
-import 'package:supercharged/supercharged.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:placar_uno/models/jogatina_model.dart';
+
+import 'package:get/get.dart';
 
 import 'definir_vencedores.dart';
+
+class JogatinaEmAndamentoBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<JogatinaController>(() => JogatinaController());
+  }
+}
 
 class JogatinaEmAndamento extends StatelessWidget {
   /// Pega a quantidade de vezes que o jogador venceu em cada posição
@@ -26,39 +32,9 @@ class JogatinaEmAndamento extends StatelessWidget {
   /// ```
   ///
   /// depois é tudo convertido para uma string
-  String pegarAsVitorias({String jogador, JogatinaModel jogatina}) {
-    Map<int, int> quaisPosicoes;
-    String finalString = '';
-
-    jogatina.resultadoPartidas.forEach((partida) {
-      int posicaoNaPartidaAtual = partida[jogador];
-      quaisPosicoes[posicaoNaPartidaAtual]++;
-    });
-    for (var i = 1; i <= jogatina.jogadores.length; i++) {
-      finalString += 'Venceu ${quaisPosicoes[i] ?? 0} vezes em $i\º lugar\n';
-    }
-
-    // removendo o último \n da string, já que criaria uma linha em branco
-    // desnecessária
-    return finalString.allBefore(RegExp("\\n\$"));
-  }
 
   @override
   Widget build(BuildContext context) {
-    Map<String, int> pontuacaoTotalDosJogadores = {};
-
-    final Box boxJogatinaAtual = Hive.box('jogatinaAtual');
-    final Box boxJogatinas = Hive.box('jogatinas');
-    final int indexJogatinaAtual = boxJogatinaAtual.get('indice');
-    JogatinaModel jogatina = boxJogatinas.getAt(indexJogatinaAtual);
-
-    jogatina.resultadoPartidas.forEach((Map<String, int> partida) {
-      partida.forEach((nomeJogador, posicaoNaPartida) {
-        pontuacaoTotalDosJogadores[nomeJogador] +=
-            (jogatina.jogadores.length - posicaoNaPartida + 1);
-      });
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Placar do Uno"),
@@ -80,7 +56,7 @@ class JogatinaEmAndamento extends StatelessWidget {
               child: Card(
                 color: Colors.blueGrey[100],
                 child: ValueListenableBuilder(
-                  valueListenable: boxJogatinas.listenable(),
+                  valueListenable: JogatinaController.to.getListenable(),
                   builder: (context, value, child) {
                     return ListView.separated(
                       separatorBuilder: (context, index) => Divider(
@@ -88,17 +64,22 @@ class JogatinaEmAndamento extends StatelessWidget {
                         thickness: 2,
                       ),
                       shrinkWrap: true,
-                      itemCount: jogatina.jogadores.length,
+                      itemCount:
+                          JogatinaController.to.jogatinaModel.jogadores.length,
                       itemBuilder: (BuildContext context, int index) {
-                        String jogador = jogatina.jogadores[index];
+                        String jogador = JogatinaController
+                            .to.jogatinaModel.jogadores[index];
                         return ListTile(
                           title: Text(jogador),
                           trailing: Text(
-                            pontuacaoTotalDosJogadores[jogador].toString() +
+                            JogatinaController
+                                    .to.pontuacaoTotalDosJogadores[jogador]
+                                    .toString() +
                                 ' pontos',
                           ),
                           subtitle: Text(
-                            pegarAsVitorias(jogador: jogador),
+                            JogatinaController.to
+                                .pegarAsVitorias(jogador: jogador),
                           ),
                         );
                       },
@@ -114,7 +95,7 @@ class JogatinaEmAndamento extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EstatisticasDaJogatinaAcabada(),
+                    builder: (context) => JogatinaAcabou(),
                   ),
                 );
               },

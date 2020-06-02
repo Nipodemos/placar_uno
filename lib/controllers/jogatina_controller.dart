@@ -2,82 +2,101 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:supercharged/supercharged.dart';
 
 import '../models/jogatina_model.dart';
 
 class JogatinaController extends GetController {
   static JogatinaController get to => Get.find();
-  Box boxJogatina = Hive.box('jogatinas');
 
-  int getIndexJogatinaAtual() {
-    Box boxJogatinaAtual = Hive.box('jogatinaAtual');
-    int indexJogatinaAtual = boxJogatinaAtual.get('indice') as num;
-    return indexJogatinaAtual;
+  JogatinaModel _jogatinaModel;
+  JogatinaModel get jogatinaModel => _jogatinaModel;
+
+  Box boxJogatinas = Hive.box('jogatinas');
+  Box boxJogatinaAtual = Hive.box('jogatinaAtual');
+
+  Map<String, int> pontuacaoTotalDosJogadores = {};
+  Map<String, bool> selecionados = {};
+
+  int indexJogatinaAtual;
+
+  @override
+  void onInit() {
+    indexJogatinaAtual = boxJogatinaAtual.get('indice') ?? null;
+    _jogatinaModel = getJogatina() ?? null;
+    super.onInit();
   }
 
-  Map<String, bool> quaisEstaoSelecionados = {};
-
-  void updateSelecionados(String jogador, bool estaSelecionado) {
-    quaisEstaoSelecionados[jogador] = estaSelecionado;
-    update(this);
+  void calcularPontuacaoTotalDosJogadores() {
+    _jogatinaModel.resultadoPartidas.forEach((Map<String, int> partida) {
+      partida.forEach((nomeJogador, posicaoNaPartida) {
+        pontuacaoTotalDosJogadores[nomeJogador] +=
+            (_jogatinaModel.jogadores.length - posicaoNaPartida + 1);
+      });
+    });
   }
 
-  void criarNovaJogatina() {
+  String pegarAsVitorias({String jogador}) {
+    Map<int, int> quaisPosicoes;
+    String finalString = '';
+
+    _jogatinaModel.resultadoPartidas.forEach((partida) {
+      int posicaoNaPartidaAtual = partida[jogador];
+      quaisPosicoes[posicaoNaPartidaAtual]++;
+    });
+    for (var i = 1; i <= _jogatinaModel.jogadores.length; i++) {
+      finalString += 'Venceu ${quaisPosicoes[i] ?? 0} vezes em $i\º lugar\n';
+    }
+
+    // removendo o último \n da string, já que criaria uma linha em branco
+    // desnecessária
+    return finalString.allBefore(RegExp("\\n\$"));
+  }
+
+  void completarJogatina() {
+    _jogatinaModel.dataFim = DateTime.now();
+
+    _jogatinaModel.completado = true;
+    JogatinaController.to.updateJogatinaAtual();
+    boxJogatinaAtual.delete('indice');
+  }
+
+  void create() {
     List<String> jogadoresSelecionados = [];
-    quaisEstaoSelecionados.forEach((key, value) {
+    selecionados.forEach((key, value) {
       if (value == true) jogadoresSelecionados.add(key);
     });
-    JogatinaModel jogatina = JogatinaModel(jogadores: jogadoresSelecionados);
+    _jogatinaModel = JogatinaModel(jogadores: jogadoresSelecionados);
     Box boxJogatinaAtual = Hive.box('jogatinaAtual');
 
-    salvarJogatina(jogatinaModel: jogatina).then((value) {
+    boxJogatinas.add(_jogatinaModel).then((value) {
       boxJogatinaAtual.put('indice', value);
+      indexJogatinaAtual = value;
       Get.toNamed('jogatina_em_andamento');
     });
   }
 
-  ValueListenable getListenableOfBox(String boxName) {
-    Box box = Hive.box(boxName);
+  JogatinaModel getJogatina() {
+    _jogatinaModel = boxJogatinas.getAt(boxJogatinaAtual.get('indice'));
+    return _jogatinaModel;
+  }
+
+  void updateAt({@required int index}) {
+    _jogatinaModel ??= getJogatina();
+    boxJogatinas.putAt(index, _jogatinaModel ?? getJogatina());
+  }
+
+  void updateJogatinaAtual() {
+    int indexJogatinaAtual = boxJogatinaAtual.get('indice');
+    boxJogatinas.putAt(indexJogatinaAtual, _jogatinaModel ?? getJogatina());
+  }
+
+  void deleteAt({@required int index}) {
+    boxJogatinas.deleteAt(index);
+  }
+
+  ValueListenable getListenable() {
+    Box box = Hive.box('jogatinas');
     return box.listenable();
-  }
-
-  Box getBox(String boxName) {
-    return Hive.box(boxName);
-  }
-
-  Future<int> addToBox({@required String boxName, @required dynamic value}) {
-    Box box = Hive.box(boxName);
-    return box.add(value);
-  }
-
-  Future<void> addToBoxAt({
-    @required String boxName,
-    @required int index,
-    @required dynamic value,
-  }) {
-    Box box = Hive.box(boxName);
-    return box.putAt(index, value);
-  }
-
-  Future salvarJogatina({
-    @required JogatinaModel jogatinaModel,
-    int index,
-  }) async {
-    if (index == null) {
-      index = await addToBox(boxName: 'jogatinas', value: jogatinaModel);
-    } else {
-      await addToBoxAt(
-        boxName: 'jogatinas',
-        index: index,
-        value: jogatinaModel,
-      );
-    }
-    return index;
-  }
-
-  void printJogatinaData(index) {
-    Box boxJogatina = Hive.box('jogatina');
-
-    print(boxJogatina.getAt(index));
   }
 }

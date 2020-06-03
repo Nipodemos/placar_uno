@@ -33,6 +33,7 @@ class JogatinaController extends GetController {
   }
 
   void calcularPontuacaoTotalDosJogadores() {
+    pontuacaoTotalDosJogadores = {};
     _jogatinaModel.jogadores.forEach((nomeJogador) {
       pontuacaoTotalDosJogadores[nomeJogador] ??= 0;
     });
@@ -44,6 +45,24 @@ class JogatinaController extends GetController {
     });
   }
 
+  /// Pega a quantidade de vezes que o jogador venceu em cada posição
+  ///
+  /// Primeio preciso dar um loop sobre cada partida
+  /// em cada partida eu pego a posição que ele venceu
+  /// e vou adicionando a um contador
+  /// no final fica algo tipo assim
+  /// a esquer a posição, a direita a quantidade de vezes
+  /// que o jogador venceu na posição
+  /// ```json
+  /// {
+  ///   1: 3
+  ///   2: 5
+  ///   3: 0
+  ///   4: 2
+  /// }
+  /// ```
+  ///
+  /// depois é tudo convertido para uma string
   String pegarAsVitorias({String jogador}) {
     Map<int, int> quaisPosicoes = {};
     String finalString = '';

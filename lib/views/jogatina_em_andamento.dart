@@ -14,25 +14,6 @@ class JogatinaEmAndamentoBinding extends Bindings {
 }
 
 class JogatinaEmAndamento extends StatelessWidget {
-  /// Pega a quantidade de vezes que o jogador venceu em cada posição
-  ///
-  /// Primeio preciso dar um loop sobre cada partida
-  /// em cada partida eu pego a posição que ele venceu
-  /// e vou adicionando a um contador
-  /// no final fica algo tipo assim
-  /// a esquer a posição, a direita a quantidade de vezes
-  /// que o jogador venceu na posição
-  /// ```json
-  /// {
-  ///   1: 3
-  ///   2: 5
-  ///   3: 0
-  ///   4: 2
-  /// }
-  /// ```
-  ///
-  /// depois é tudo convertido para uma string
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +25,7 @@ class JogatinaEmAndamento extends StatelessWidget {
             child: RaisedButton(
               child: Text('Acabou a jogatina'),
               onPressed: () {
-                Get.offAllNamed('jogatina_acabou');
+                Get.offNamed('jogatina_acabou');
               },
             ),
           )
@@ -84,7 +65,7 @@ class JogatinaEmAndamento extends StatelessWidget {
                           ),
                           trailing: Text(
                             pontuacaoTotal.toString() +
-                                (pontuacaoTotal < 2 ? ' ponto' : 'pontos'),
+                                (pontuacaoTotal < 2 ? ' ponto' : ' pontos'),
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,

@@ -33,7 +33,7 @@ class JogatinaAcabou extends StatelessWidget {
       listaPontuacaoJogadores.sort((elementoa, elementob) {
         return elementoa.value.compareTo(elementob.value);
       });
-      listaPontuacaoJogadores = listaPontuacaoJogadores.reversed;
+      listaPontuacaoJogadores = listaPontuacaoJogadores.reversed.toList();
       listaPontuacaoJogadores.forEach((MapEntry jogadorInfo) {
         finalString += '${jogadorInfo.key} fez ${jogadorInfo.value} pontos\n';
       });

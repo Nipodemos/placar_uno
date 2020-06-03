@@ -6,8 +6,6 @@ import 'package:intro_slider/slide_object.dart';
 import 'package:placar_uno/controllers/jogatina_controller.dart';
 import 'package:placar_uno/models/jogatina_model.dart';
 
-import 'jogatina_em_andamento.dart';
-
 Map<String, int> vencedores = {};
 
 class DefinirVencedoresBinding extends Bindings {
@@ -26,14 +24,14 @@ class DefinirVencedores extends StatelessWidget {
         backgroundColor: Color(0xfff5a623),
         centerWidget: VenceuEmQualPosicao(jogador),
       );
-    });
+    }).toList();
   }
 
   void onDonePress() {
     JogatinaController.to.jogatinaModel.resultadoPartidas.add(vencedores);
     JogatinaController.to.updateJogatinaAtual();
     vencedores = {};
-    Get.to(JogatinaEmAndamento());
+    Get.back();
   }
 
   @override

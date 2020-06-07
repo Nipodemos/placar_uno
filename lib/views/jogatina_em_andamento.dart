@@ -31,14 +31,17 @@ class JogatinaEmAndamento extends StatelessWidget {
                 child: ValueListenableBuilder(
                   valueListenable: JogatinaController.to.getListenable(),
                   builder: (context, value, child) {
+                    print(JogatinaController.to.jogatinaModel.toString());
+                    int lengthJogadores =
+                        JogatinaController.to.jogatinaModel.jogadores.length;
+                    print("length Jogadores: $lengthJogadores");
                     return ListView.separated(
                       separatorBuilder: (context, index) => Divider(
                         color: Colors.orange,
                         thickness: 2,
                       ),
                       shrinkWrap: true,
-                      itemCount:
-                          JogatinaController.to.jogatinaModel.jogadores.length,
+                      itemCount: lengthJogadores,
                       itemBuilder: (BuildContext context, int index) {
                         String jogador = JogatinaController
                             .to.jogatinaModel.jogadores[index];

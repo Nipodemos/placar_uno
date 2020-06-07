@@ -39,7 +39,7 @@ class JogatinaAcabou extends StatelessWidget {
     final int indexJogatinaAtual = JogatinaController.to.indexJogatinaAtual;
     if (indexJogatinaAtual != null) {
       JogatinaModel jogatina = JogatinaController.to.jogatinaModel;
-
+      JogatinaController.to.completarJogatina();
       return Scaffold(
         appBar: AppBar(
           title: Text('Tudo sobre essa jogatina'),
@@ -52,12 +52,18 @@ class JogatinaAcabou extends StatelessWidget {
               Text(
                   'Vocês jogaram ${jogatina.resultadoPartidas.length} partidas'),
               Text(
-                'A partida começou ${TimeAgo.format(jogatina.dataInicio, locale: "ptbr")}',
+                'A partida começou ${TimeAgo.format(jogatina.dataInicio, locale: "pt-BR")}',
               ),
               Text(
                 stringfyPontosDosVencedores(jogatina),
               ),
-              Text('Espero que tenham se divertido!')
+              Text('Espero que tenham se divertido!'),
+              RaisedButton(
+                onPressed: () {
+                  Get.offAllNamed('/');
+                },
+                child: Text('Voltar para Home'),
+              )
             ],
           ),
         ),

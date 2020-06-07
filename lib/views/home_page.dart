@@ -9,40 +9,30 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Placar Uno'),
       ),
-      body: Container(
-        padding: EdgeInsets.all(8),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FlutterLogo(),
-              Text(
-                'Placar Uno',
-                style: TextStyle(fontSize: 28),
-              ),
-              GetBuilder<JogatinaController>(
-                builder: (controller) {
-                  int indexJogatinaAtual = controller.indexJogatinaAtual;
-
-                  if (indexJogatinaAtual == null) {
-                    return RaisedButton(
-                      child: Text('Nova Jogatina'),
-                      onPressed: () {
-                        Get.toNamed('selecionar_jogadores');
-                      },
-                    );
-                  } else {
-                    return RaisedButton(
-                      child: Text('Continuar Jogatina'),
-                      onPressed: () {
-                        Get.toNamed('jogatina_em_andamento');
-                      },
-                    );
-                  }
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FlutterLogo(),
+            Text(
+              'Placar Uno',
+              style: TextStyle(fontSize: 28),
+            ),
+            if (JogatinaController.to.indexJogatinaAtual == null)
+              RaisedButton(
+                child: Text('Nova Jogatina'),
+                onPressed: () {
+                  Get.offNamed('selecionar_jogadores');
                 },
               )
-            ],
-          ),
+            else
+              RaisedButton(
+                child: Text('Continuar Jogatina'),
+                onPressed: () {
+                  Get.offNamed('jogatina_em_andamento');
+                },
+              )
+          ],
         ),
       ),
     );

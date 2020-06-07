@@ -13,40 +13,40 @@ class ListarJogadores extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ValueListenableBuilder(
-              valueListenable: JogadoresController.to.boxJogadores.listenable(),
-              builder: (context, _, child) {
-                return GetBuilder<JogatinaController>(
-                  builder: (controller) => ListView.separated(
-                    itemCount: JogadoresController.to.boxJogadores.values
-                        .toList()
-                        .length,
-                    itemBuilder: (BuildContext context, int index) {
-                      String jogador =
-                          JogadoresController.to.boxJogadores.getAt(index);
-                      // print('ListView.separated item builder, nome player: ' + jogador);
+            child: GetBuilder<JogatinaController>(
+              builder: (jogatinaController) {
+                return GetBuilder<JogadoresController>(
+                  init: JogadoresController(),
+                  builder: (jogadoresController) {
+                    return ListView.separated(
+                      itemCount: jogadoresController.boxJogadores.values.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        String jogador =
+                            jogadoresController.boxJogadores.getAt(index);
+                        // print('ListView.separated item builder, nome player: ' + jogador);
 
-                      JogatinaController.to.selecionados[jogador] ??= false;
-                      return CheckboxListTile(
-                        value: JogatinaController.to.selecionados[jogador],
-                        title: Text(jogador, style: TextStyle(fontSize: 20)),
-                        onChanged: (isSelected) =>
-                            controller.alterarSelecionados(isSelected, jogador),
-                        secondary: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            JogadoresController.to.boxJogadores.deleteAt(index);
-                          },
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Divider(
-                        color: Colors.orange,
-                        thickness: 2,
-                      );
-                    },
-                  ),
+                        jogatinaController.selecionados[jogador] ??= false;
+                        return CheckboxListTile(
+                          value: jogatinaController.selecionados[jogador],
+                          title: Text(jogador, style: TextStyle(fontSize: 20)),
+                          onChanged: (isSelected) => jogatinaController
+                              .alterarSelecionados(isSelected, jogador),
+                          secondary: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              jogadoresController.boxJogadores.deleteAt(index);
+                            },
+                          ),
+                        );
+                      },
+                      separatorBuilder: (_, __) {
+                        return Divider(
+                          color: Colors.orange,
+                          thickness: 2,
+                        );
+                      },
+                    );
+                  },
                 );
               },
             ),
@@ -87,7 +87,9 @@ class ListarJogadores extends StatelessWidget {
               child: Text('Adicionar'),
             ),
             cancel: FlatButton(
-                onPressed: () => Get.back(), child: Text("Cancelar")),
+              onPressed: () => Get.back(),
+              child: Text("Cancelar"),
+            ),
           );
         },
       ),

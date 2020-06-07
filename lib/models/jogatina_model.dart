@@ -20,12 +20,24 @@ class JogatinaModel {
   @HiveField(7)
   bool completado = false;
 
-  JogatinaModel({@required this.jogadores, int index})
-      : assert(jogadores.length > 0) {
-    if (index != null) {
-    } else {
-      resultadoPartidas ??= [];
-    }
+  JogatinaModel({@required this.jogadores}) : assert(jogadores.length > 0);
+
+  @override
+  String toString() {
+    return "Jogadores: " +
+        jogadores.join(', ') +
+        "\n"
+            "Data Início: '" +
+        dataInicio.toString() +
+        "', Data Fim: '" +
+        dataFim.toString() +
+        "'\n" +
+        "Resultado partidas: " +
+        resultadoPartidas
+            .map((partida) => partida.toString())
+            .toList()
+            .join('\n') +
+        "completado: " +
+        completado.toString();
   }
-  
 }

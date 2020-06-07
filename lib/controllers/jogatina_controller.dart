@@ -23,13 +23,13 @@ class JogatinaController extends GetController {
   @override
   void onInit() {
     indexJogatinaAtual = boxJogatinaAtual.get('indice') ?? null;
-    _jogatinaModel = getJogatina() ?? null;
+    _jogatinaModel = getJogatina();
     super.onInit();
   }
 
   void alterarSelecionados(bool isSelected, String jogador) {
     selecionados[jogador] = isSelected;
-    update(this);
+    update();
   }
 
   void calcularPontuacaoTotalDosJogadores() {
@@ -90,23 +90,29 @@ class JogatinaController extends GetController {
   }
 
   void create() {
+    if (selecionados.isEmpty) {
+      throw "JogatinaController.create() error: map 'selecionados' não pode estar vazio";
+    }
     List<String> jogadoresSelecionados = [];
     selecionados.forEach((key, value) {
       if (value == true) jogadoresSelecionados.add(key);
     });
     _jogatinaModel = JogatinaModel(jogadores: jogadoresSelecionados);
-    Box boxJogatinaAtual = Hive.box('jogatinaAtual');
-
+    print(_jogatinaModel.toString());
     boxJogatinas.add(_jogatinaModel).then((value) {
       boxJogatinaAtual.put('indice', value);
       indexJogatinaAtual = value;
-      Get.offAllNamed('jogatina_em_andamento');
+      Get.offNamed('jogatina_em_andamento');
     });
   }
 
   JogatinaModel getJogatina() {
-    _jogatinaModel = boxJogatinas.getAt(boxJogatinaAtual.get('indice'));
-    return _jogatinaModel;
+    if (indexJogatinaAtual == null) {
+      return null;
+    } else {
+      _jogatinaModel = boxJogatinas.getAt(indexJogatinaAtual);
+      return _jogatinaModel;
+    }
   }
 
   void updateAt({@required int index}) {

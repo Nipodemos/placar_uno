@@ -9,7 +9,7 @@ class JogatinaModel {
   DateTime dataInicio = DateTime.now();
 
   @HiveField(2)
-  DateTime dataFim = DateTime.now();
+  DateTime dataFim;
 
   @HiveField(3)
   List<Map<String, int>> resultadoPartidas = [];
@@ -37,6 +37,7 @@ class JogatinaModel {
             .map((partida) => partida.toString())
             .toList()
             .join('\n') +
+        "\n" +
         "completado: " +
         completado.toString();
   }

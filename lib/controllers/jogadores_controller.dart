@@ -16,9 +16,10 @@ class JogadoresController extends GetController {
     update();
   }
 
-  void onSubmited() {
-    boxJogadores.add(textEditingController.text);
+  void onSubmited() async {
+    await boxJogadores.add(textEditingController.text);
     textEditingController.text = '';
+    update();
     Get.back();
   }
 
@@ -26,6 +27,11 @@ class JogadoresController extends GetController {
   void onClose() {
     textEditingController.dispose();
     super.onClose();
+  }
+
+  void deleteJogador(int index) async {
+    await boxJogadores.deleteAt(index);
+    update();
   }
 
   ValueListenable getListenable() {

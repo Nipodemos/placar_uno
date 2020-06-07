@@ -29,7 +29,7 @@ class DefinirVencedores extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (JogatinaController.to.indexJogatinaAtual == null) {
+    if (JogatinaController.to.boxJogatinaAtual.get('indice') == null) {
       return Center(
         child: Text('treta'),
       );

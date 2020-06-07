@@ -16,20 +16,11 @@ class JogatinaController extends GetController {
   Box boxJogatinaAtual = Hive.box('jogatinaAtual');
 
   Map<String, int> pontuacaoTotalDosJogadores = {};
-  Map<String, bool> selecionados = {};
-
-  int indexJogatinaAtual;
 
   @override
   void onInit() {
-    indexJogatinaAtual = boxJogatinaAtual.get('indice') ?? null;
     _jogatinaModel = getJogatina();
     super.onInit();
-  }
-
-  void alterarSelecionados(bool isSelected, String jogador) {
-    selecionados[jogador] = isSelected;
-    update();
   }
 
   void calcularPontuacaoTotalDosJogadores() {
@@ -87,9 +78,11 @@ class JogatinaController extends GetController {
     _jogatinaModel.completado = true;
     JogatinaController.to.updateJogatinaAtual();
     boxJogatinaAtual.delete('indice');
+    print('\n----------------------------------\nJogatina terminada');
+    print(_jogatinaModel.toString());
   }
 
-  void create() {
+  void create(Map<String, bool> selecionados) {
     if (selecionados.isEmpty) {
       throw "JogatinaController.create() error: map 'selecionados' não pode estar vazio";
     }
@@ -101,27 +94,29 @@ class JogatinaController extends GetController {
     print(_jogatinaModel.toString());
     boxJogatinas.add(_jogatinaModel).then((value) {
       boxJogatinaAtual.put('indice', value);
-      indexJogatinaAtual = value;
       Get.offNamed('jogatina_em_andamento');
     });
   }
 
   JogatinaModel getJogatina() {
-    if (indexJogatinaAtual == null) {
+    if (boxJogatinaAtual.get('indice') == null) {
       return null;
     } else {
-      _jogatinaModel = boxJogatinas.getAt(indexJogatinaAtual);
+      _jogatinaModel = boxJogatinas.getAt(boxJogatinaAtual.get('indice'));
       return _jogatinaModel;
     }
   }
 
-  void updateAt({@required int index}) {
-    _jogatinaModel ??= getJogatina();
-    boxJogatinas.putAt(index, _jogatinaModel ?? getJogatina());
+  void updateAt({@required int index, @required JogatinaModel model}) {
+    boxJogatinas.putAt(index, model);
   }
 
   void updateJogatinaAtual() {
     int indexJogatinaAtual = boxJogatinaAtual.get('indice');
+    if (indexJogatinaAtual == null) {
+      throw 'JogatinaController.updateJogatinaAtual(): Erro: Precisa haver uma partida em andamento' +
+          'antes desse método ser chamado (a.k.a var "indexJogatinaAtual" está null e não pode estar) ';
+    }
     boxJogatinas.putAt(indexJogatinaAtual, _jogatinaModel ?? getJogatina());
   }
 
@@ -130,7 +125,6 @@ class JogatinaController extends GetController {
   }
 
   ValueListenable getListenable() {
-    Box box = Hive.box('jogatinas');
-    return box.listenable();
+    return boxJogatinas.listenable();
   }
 }

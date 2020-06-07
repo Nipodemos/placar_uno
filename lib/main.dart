@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:placar_uno/bindings/jogatina_binding.dart';
+import 'package:placar_uno/views/descrever_jogatina.dart';
 
 import 'models/jogatina_model.dart';
 
@@ -27,6 +28,9 @@ void main() async {
         '/': GetRoute(
           page: HomePage(),
           binding: JogatinaBinding(),
+        ),
+        'descrever_jogatina': GetRoute(
+          page: DescreverJogatinas(),
         ),
         '/selecionar_jogadores': GetRoute(
           page: ListarJogadores(),

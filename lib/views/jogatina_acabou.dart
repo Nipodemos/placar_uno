@@ -36,7 +36,8 @@ class JogatinaAcabou extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int indexJogatinaAtual = JogatinaController.to.indexJogatinaAtual;
+    final int indexJogatinaAtual =
+        JogatinaController.to.boxJogatinaAtual.get('indice');
     if (indexJogatinaAtual != null) {
       JogatinaModel jogatina = JogatinaController.to.jogatinaModel;
       JogatinaController.to.completarJogatina();

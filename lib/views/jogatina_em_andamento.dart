@@ -1,17 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:placar_uno/controllers/jogatina_controller.dart';
-import 'package:placar_uno/views/jogatina_acabou.dart';
 
 import 'package:get/get.dart';
-
-import 'definir_vencedores.dart';
-
-class JogatinaEmAndamentoBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut<JogatinaController>(() => JogatinaController());
-  }
-}
 
 class JogatinaEmAndamento extends StatelessWidget {
   @override

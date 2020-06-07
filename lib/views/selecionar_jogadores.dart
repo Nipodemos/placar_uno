@@ -2,15 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:placar_uno/controllers/jogadores_controller.dart';
 import 'package:placar_uno/controllers/jogatina_controller.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-
-class JogadoresBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut<JogadoresController>(() => JogadoresController());
-    Get.lazyPut<JogatinaController>(() => JogatinaController());
-  }
-}
 
 class ListarJogadores extends StatelessWidget {
   @override

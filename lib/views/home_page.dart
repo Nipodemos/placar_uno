@@ -2,13 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:placar_uno/controllers/jogatina_controller.dart';
 
-class HomePageBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut<JogatinaController>(() => JogatinaController());
-  }
-}
-
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

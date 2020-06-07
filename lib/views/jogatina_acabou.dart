@@ -4,13 +4,6 @@ import 'package:placar_uno/controllers/jogatina_controller.dart';
 import 'package:placar_uno/models/jogatina_model.dart';
 import 'package:timeago/timeago.dart' as TimeAgo;
 
-class JogatinaAcabouBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut<JogatinaController>(() => JogatinaController());
-  }
-}
-
 class JogatinaAcabou extends StatelessWidget {
   String stringfyPontosDosVencedores(JogatinaModel jogatina) {
     Map<String, int> pontuacaoTotalDosJogadores = {};

@@ -8,13 +8,6 @@ import 'package:placar_uno/models/jogatina_model.dart';
 
 Map<String, int> vencedores = {};
 
-class DefinirVencedoresBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut<JogatinaController>(() => JogatinaController());
-  }
-}
-
 class DefinirVencedores extends StatelessWidget {
   List<Slide> getSlides() {
     return JogatinaController.to.jogatinaModel.jogadores.map((jogador) {

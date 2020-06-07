@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:placar_uno/bindings/jogatina_binding.dart';
 
 import 'models/jogatina_model.dart';
 
@@ -25,21 +26,24 @@ void main() async {
       namedRoutes: {
         '/': GetRoute(
           page: HomePage(),
-          binding: HomePageBinding(),
+          binding: JogatinaBinding(),
         ),
         '/selecionar_jogadores': GetRoute(
           page: ListarJogadores(),
-          binding: JogadoresBinding(),
+          binding: JogatinaBinding(),
         ),
         '/jogatina_em_andamento': GetRoute(
           page: JogatinaEmAndamento(),
-          binding: JogatinaEmAndamentoBinding(),
+          binding: JogatinaBinding(),
         ),
         '/definir_vencedores': GetRoute(
           page: DefinirVencedores(),
-          binding: DefinirVencedoresBinding(),
+          binding: JogatinaBinding(),
         ),
-        '/jogatina_acabou': GetRoute(page: JogatinaAcabou()),
+        '/jogatina_acabou': GetRoute(
+          page: JogatinaAcabou(),
+          binding: JogatinaBinding(),
+        ),
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,

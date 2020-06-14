@@ -23,12 +23,6 @@ class JogadoresController extends GetController {
     Get.back();
   }
 
-  @override
-  void onClose() {
-    textEditingController.dispose();
-    super.onClose();
-  }
-
   void deleteJogador(int index) async {
     await boxJogadores.deleteAt(index);
     update();

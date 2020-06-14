@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:placar_uno/bindings/jogadores_binding.dart';
 import 'package:placar_uno/bindings/jogatina_binding.dart';
 import 'package:placar_uno/views/descrever_jogatina.dart';
+import 'package:placar_uno/views/listar_partidas.dart';
 
 import 'models/jogatina_model.dart';
 
@@ -24,29 +26,30 @@ void main() async {
     GetMaterialApp(
       title: 'Flutter Demo',
       initialRoute: '/',
+      initialBinding: JogatinaBinding(),
       namedRoutes: {
         '/': GetRoute(
           page: HomePage(),
-          binding: JogatinaBinding(),
         ),
         'descrever_jogatina': GetRoute(
           page: DescreverJogatinas(),
         ),
         '/selecionar_jogadores': GetRoute(
           page: ListarJogadores(),
-          binding: JogatinaBinding(),
+          binding: JogadoresBinding(),
         ),
         '/jogatina_em_andamento': GetRoute(
           page: JogatinaEmAndamento(),
-          binding: JogatinaBinding(),
+        ),
+        'listar_partidas': GetRoute(
+          page: ListarPartidas(),
+        ),
         ),
         '/definir_vencedores': GetRoute(
           page: DefinirVencedores(),
-          binding: JogatinaBinding(),
         ),
         '/jogatina_acabou': GetRoute(
           page: JogatinaAcabou(),
-          binding: JogatinaBinding(),
         ),
       },
       theme: ThemeData(

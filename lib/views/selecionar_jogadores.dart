@@ -14,7 +14,6 @@ class ListarJogadores extends StatelessWidget {
         children: [
           Expanded(
             child: GetBuilder<JogadoresController>(
-              init: JogadoresController(),
               builder: (jogadoresController) {
                 return ListView.separated(
                   itemCount: jogadoresController.boxJogadores.values.length,

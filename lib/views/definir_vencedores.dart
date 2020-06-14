@@ -21,10 +21,16 @@ class DefinirVencedores extends StatelessWidget {
   }
 
   void onDonePress() {
-    JogatinaController.to.jogatinaModel.resultadoPartidas.add(vencedores);
+    int indexPartida = Get?.arguments;
+    if (indexPartida == null) {
+      JogatinaController.to.jogatinaModel.resultadoPartidas.add(vencedores);
+    } else {
+      JogatinaController.to.jogatinaModel.resultadoPartidas[indexPartida] =
+          vencedores;
+    }
     JogatinaController.to.updateJogatinaAtual();
+    Get.offNamed('jogatina_em_andamento');
     vencedores = {};
-    Get.back();
   }
 
   @override

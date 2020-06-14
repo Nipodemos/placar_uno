@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:placar_uno/bindings/jogadores_binding.dart';
 import 'package:placar_uno/bindings/jogatina_binding.dart';
 import 'package:placar_uno/views/descrever_jogatina.dart';
+import 'package:placar_uno/views/detalhes_partida.dart';
 import 'package:placar_uno/views/listar_partidas.dart';
 
 import 'models/jogatina_model.dart';
@@ -44,6 +45,8 @@ void main() async {
         'listar_partidas': GetRoute(
           page: ListarPartidas(),
         ),
+        'detalhes_partida': GetRoute(
+          page: DetalhesPartida(),
         ),
         '/definir_vencedores': GetRoute(
           page: DefinirVencedores(),

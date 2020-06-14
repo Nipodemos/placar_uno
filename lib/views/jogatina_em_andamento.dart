@@ -72,11 +72,26 @@ class JogatinaEmAndamento extends StatelessWidget {
               ),
             ),
             SizedBox(height: 5),
-            RaisedButton(
-              child: Text('Terminou uma partida'),
-              onPressed: () {
-                Get.toNamed('definir_vencedores');
-              },
+            Row(
+              children: [
+                RaisedButton(
+                  child: Text('Terminou uma partida'),
+                  onPressed: () {
+                    Get.toNamed('definir_vencedores');
+                  },
+                ),
+                SizedBox(width: 16),
+                RaisedButton(
+                  child: Text("Listar partidas"),
+                  onPressed: JogatinaController
+                              .to.jogatinaModel.resultadoPartidas.length ==
+                          0
+                      ? null
+                      : () {
+                          Get.toNamed('listar_partidas');
+                        },
+                ),
+              ],
             ),
           ],
         ),
